@@ -8,10 +8,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ChessGL.Figures
 {
-    class Figure
+    class Figure : ISelectableEntity
     {
         Texture2D texture;
         public virtual Point Position { get; set; }
+        public bool Selected { get; set; }
+        public bool Selectable { get; set; }
+
         public void LoadTexture(Texture2D texture)
         {
             this.texture = texture;
@@ -31,5 +34,15 @@ namespace ChessGL.Figures
             }
             return false;
         }
+        public bool PossibleMove()
+        {
+
+            return false;
+        }
+
+        public virtual void ToDefaultPosition()
+        {
+        }
+        
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Text;
 using System.Collections.Generic;
 using ChessGL.Figures;
+using ChessGL.Moves;
 
 namespace ChessGL
 {
@@ -11,6 +12,10 @@ namespace ChessGL
     {
         Texture2D queenTexture;
         Texture2D deskTexture;
+
+        bool entitySelected = false;
+        //ISelectableEntity selectedEntity;
+        Figure selectedFigure;
 
         Vector2 queenPosition;
 
@@ -79,33 +84,69 @@ namespace ChessGL
             {
                 _graphics.ToggleFullScreen();
             }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                foreach (var figure in figureList)
+                {
+                    figure.ToDefaultPosition();
+                }
+            }
 
             // TODO: Add your update logic here
             var mouse = Mouse.GetState();
             var kstate = Keyboard.GetState();
 
             //if (kstate.IsKeyDown(Keys.Up))
-            //Figure movingFigure;
             if (mouse.LeftButton == ButtonState.Pressed)
             {
                 message = pressed;
-                foreach (var figure in figureList)
+                if (entitySelected)
+                {
+                    selectedFigure.Selected = false;
+                    selectedFigure = null;
+                    entitySelected = false;
+                }
+                else
+                {
+                    foreach (var figure in figureList)
+                    {
+                        if (figure.PointInFigureArea(mouse.Position))
+                        {
+                            message += $"on figure {figure.ToString()}";
+                            selectedFigure = figure;
+                            entitySelected = true;
+                            break;
+
+                        }
+                    }
+                }
+                /*foreach (var figure in figureList)
                 {
                     if (figure.PointInFigureArea(mouse.Position))
                     {
-                       figure.Position = mouse.Position;
+                        message += $"on figure {figure.ToString()}";
+                        movingFigure = figure;
+                        break;
+
                     }
+                }
+                if (movingFigure != null)
+                {
+                    movingFigure.Position = mouse.Position;
                 }
                 //queenPosition = mouse.Position.ToVector2();
                 //whiteQueen.Position = mouse.Position;
                 // queenPosition.X = mouse.X;
-                // queenPosition.Y = mouse.Y;
+                // queenPosition.Y = mouse.Y;*/
             }
             else
             {
                 message = notPressed;
             }
-            
+            if (entitySelected)
+            {
+                selectedFigure.Position = mouse.Position;
+            }
             message += " X: " + mouse.X.ToString() + " Y: " + mouse.Y.ToString();
 
             base.Update(gameTime);
