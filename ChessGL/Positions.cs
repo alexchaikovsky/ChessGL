@@ -4,9 +4,11 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-namespace ChessGL.Figures
+
+namespace ChessGL
 {
-    class King : Figure
+    public class Positions
     {
+        List<Point> defaulPositions;
     }
 }
