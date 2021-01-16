@@ -1,20 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using ChessGL;
 
 namespace ChessGL.Moves
 {
-    class Cell
+    public class Cell : SelectableEntity
     {
         private Point position;
-        private string name;
-        Cell(Point position, string name)
+        public int row;
+        public int col; 
+        public Cell(Point position, int size)
         {
             this.position = position;
-            this.name = name;
+            //this.name = name;
+            this.pixelSize = size;
         }
-        public Point CellPosition 
+        public Point CellPosition
         {
             get
             {
@@ -22,5 +24,24 @@ namespace ChessGL.Moves
             }
         }
         public bool Empty { get; set; }
+        public override string MyName()
+        {
+            return $"CELL {row}{(char)col}\nPosition: {position.ToString()}";
+        }
+
+        //public void MouseClickEvent(object sender, MouseClickEventArgs e)
+        //{
+        //    if (sender is Game)
+        //    {
+        //        if (PointInFigureArea(e.point))
+        //        {
+        //            if (e.mouse.LeftButton == ButtonState.Pressed)
+        //            {
+        //                this.Selected = true;
+        //                //
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

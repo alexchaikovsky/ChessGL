@@ -30,6 +30,7 @@ namespace ChessGL
 
         string message = "Init";
         List <Figure> figureList;
+        Desk desk;
         //MouseState mouse;
 
 
@@ -52,6 +53,7 @@ namespace ChessGL
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            desk = new Desk();
             figureList = new List<Figure>();
 
             whiteQueen = new Queen(true);
@@ -61,6 +63,19 @@ namespace ChessGL
             whiteKing = new King();
             //whiteKing.Position = new Point(200, 100);
             figureList.Add(whiteKing);
+            foreach (var figure in figureList)
+            {
+                figure.ToDefaultPosition();
+                this.MouseClickEvent += figure.MouseClickEvent;
+            }
+            foreach (var row in desk.board)
+            {
+                foreach (var cell in row)
+                {
+                   // figure.ToDefaultPosition();
+                    this.MouseClickEvent += cell.MouseClickEvent;
+                }
+            }
             //queenPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,_graphics.PreferredBackBufferHeight / 2);
             base.Initialize();
             //base.Window.AllowUserResizing = true;
@@ -102,57 +117,58 @@ namespace ChessGL
             if (mouse.LeftButton == ButtonState.Pressed)
             {
                 message = pressed;
-                if (entitySelected)
-                {
-                    selectedFigure.Selected = false;
-                    selectedFigure = null;
-                    entitySelected = false;
+                MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
+                //if (entitySelected)
+                //{
+                //    selectedFigure.Selected = false;
+                //    selectedFigure = null;
+                //    entitySelected = false;
                     
-                }
-                else
-                {
-                    foreach (var figure in figureList)
-                    {
-                        if (figure.PointInFigureArea(mouse.Position))
-                        {
-                            // message += $"on figure {figure.ToString()}";
-                            selectedFigure = figure;
-                            selectedFigure.Selected = true;
-                            entitySelected = true;
-                            break;
+                //}
+                //else
+                //{
+                //    foreach (var figure in figureList)
+                //    {
+                //        if (figure.PointInFigureArea(mouse.Position))
+                //        {
+                //            // message += $"on figure {figure.ToString()}";
+                //            selectedFigure = figure;
+                //            selectedFigure.Selected = true;
+                //            entitySelected = true;
+                //            break;
 
-                        }
-                    }
+                //        }
+                //    }
                     
-                }
-                /*foreach (var figure in figureList)
-                {
-                    if (figure.PointInFigureArea(mouse.Position))
-                    {
-                        message += $"on figure {figure.ToString()}";
-                        movingFigure = figure;
-                        break;
+                //}
+                ///*foreach (var figure in figureList)
+                //{
+                //    if (figure.PointInFigureArea(mouse.Position))
+                //    {
+                //        message += $"on figure {figure.ToString()}";
+                //        movingFigure = figure;
+                //        break;
 
-                    }
-                }
-                if (movingFigure != null)
-                {
-                    movingFigure.Position = mouse.Position;
-                }
-                //queenPosition = mouse.Position.ToVector2();
-                //whiteQueen.Position = mouse.Position;
-                // queenPosition.X = mouse.X;
-                // queenPosition.Y = mouse.Y;*/
+                //    }
+                //}
+                //if (movingFigure != null)
+                //{
+                //    movingFigure.Position = mouse.Position;
+                //}
+                ////queenPosition = mouse.Position.ToVector2();
+                ////whiteQueen.Position = mouse.Position;
+                //// queenPosition.X = mouse.X;
+                //// queenPosition.Y = mouse.Y;*/
             }
             else
             {
                 message = notPressed;
             }
-            if (entitySelected && selectedFigure.Selected)
-            {
+            //if (entitySelected && selectedFigure.Selected)
+            //{
 
-                selectedFigure.Position = mouse.Position;
-            }
+            //    selectedFigure.Position = mouse.Position;
+            //}
             message += " X: " + mouse.X.ToString() + " Y: " + mouse.Y.ToString() + " ";
             message += entitySelected.ToString();
             message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
