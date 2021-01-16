@@ -4,14 +4,23 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ChessGL;
 
 namespace ChessGL.Figures
 {
-    class Queen : Figure
+    public class Queen : Figure
     {
-        public override void ToDefaultPosition()
+        public Queen(bool white)
         {
-            this.Position = new Point(100, 100); ;
+            this.white = white;
+            if (white)
+            {
+                this.defaultPosition = new Point(100, 500);
+            }
+            else
+            {
+                this.defaultPosition = new Point(100, 100);
+            }
         }
     }
 }

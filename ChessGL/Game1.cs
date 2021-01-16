@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Text;
+using System;
 using System.Collections.Generic;
 using ChessGL.Figures;
 using ChessGL.Moves;
@@ -14,6 +15,7 @@ namespace ChessGL
         Texture2D deskTexture;
 
         bool entitySelected = false;
+
         //ISelectableEntity selectedEntity;
         Figure selectedFigure;
 
@@ -52,12 +54,12 @@ namespace ChessGL
             // TODO: Add your initialization logic here
             figureList = new List<Figure>();
 
-            whiteQueen = new Queen();
-            whiteQueen.Position = new Point(100, 100);
+            whiteQueen = new Queen(true);
+            //whiteQueen.Position = new Point(100, 100);
             figureList.Add(whiteQueen);
 
             whiteKing = new King();
-            whiteKing.Position = new Point(200, 100);
+            //whiteKing.Position = new Point(200, 100);
             figureList.Add(whiteKing);
             //queenPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,_graphics.PreferredBackBufferHeight / 2);
             base.Initialize();
@@ -105,6 +107,7 @@ namespace ChessGL
                     selectedFigure.Selected = false;
                     selectedFigure = null;
                     entitySelected = false;
+                    
                 }
                 else
                 {
@@ -112,13 +115,15 @@ namespace ChessGL
                     {
                         if (figure.PointInFigureArea(mouse.Position))
                         {
-                            message += $"on figure {figure.ToString()}";
+                            // message += $"on figure {figure.ToString()}";
                             selectedFigure = figure;
+                            selectedFigure.Selected = true;
                             entitySelected = true;
                             break;
 
                         }
                     }
+                    
                 }
                 /*foreach (var figure in figureList)
                 {
@@ -143,12 +148,14 @@ namespace ChessGL
             {
                 message = notPressed;
             }
-            if (entitySelected)
+            if (entitySelected && selectedFigure.Selected)
             {
+
                 selectedFigure.Position = mouse.Position;
             }
-            message += " X: " + mouse.X.ToString() + " Y: " + mouse.Y.ToString();
-
+            message += " X: " + mouse.X.ToString() + " Y: " + mouse.Y.ToString() + " ";
+            message += entitySelected.ToString();
+            message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
             base.Update(gameTime);
         }
 
@@ -169,5 +176,15 @@ namespace ChessGL
 
             base.Draw(gameTime);
         }
+        protected virtual void OnMouseClick(Game game, MouseClickEventArgs e)
+        {
+            MouseClickEvent?.Invoke(this, e);
+        }
+        public event EventHandler<MouseClickEventArgs> MouseClickEvent;
+    }
+    public class MouseClickEventArgs: EventArgs
+    {
+        public Point point;
+        public MouseState mouse;
     }
 }
