@@ -4,20 +4,22 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace ChessGL.Moves
 {
     public class Desk
     {
         public List<List<Cell>> board;
-        public Desk()
+        int size;
+        public Desk(Single resizeOption = 1)
         {
             board = new List<List<Cell>>();
             int rowCh = 1;
             int colCh = 97;
             var point = new Point(48, 18);
-            int size = 162;
-            for (int i = 1; i <= 8; i++)
+            size = (int)(162*resizeOption);
+            for (int i = 8; i >= 1; i--)
             
             {
      
@@ -30,11 +32,17 @@ namespace ChessGL.Moves
                     row.Add(cell);
 
                     point.X += size;
-
+                    //Debug.WriteLine($"CELL {row}{(char)cell.col}\nPosition: {cell.Position.ToString()}");
                 }
+                point.X = 48;
                 point.Y += size;
                 board.Add(row);
             }
+            
+        }
+        public void UpdateTexturesSize(Single resizeOption)
+        {
+            size = (int)(162 * resizeOption);
         }
     }
 }

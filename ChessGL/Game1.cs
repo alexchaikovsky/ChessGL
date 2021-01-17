@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using ChessGL.Figures;
 using ChessGL.Moves;
+using System.Diagnostics;
 
 namespace ChessGL
 {
@@ -13,9 +14,10 @@ namespace ChessGL
     {
         Texture2D queenTexture;
         Texture2D deskTexture;
-
+        //private MouseState lastMouseState = new MouseState();
+        TwoStageMouse mouse;
         bool entitySelected = false;
-
+        bool mousePressed = false;
         //ISelectableEntity selectedEntity;
         Figure selectedFigure;
 
@@ -53,7 +55,8 @@ namespace ChessGL
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            desk = new Desk();
+            mouse = new TwoStageMouse();
+            desk = new Desk(0.7f);
             figureList = new List<Figure>();
 
             whiteQueen = new Queen(true);
@@ -67,6 +70,7 @@ namespace ChessGL
             {
                 figure.ToDefaultPosition();
                 this.MouseClickEvent += figure.MouseClickEvent;
+                
             }
             foreach (var row in desk.board)
             {
@@ -74,8 +78,15 @@ namespace ChessGL
                 {
                    // figure.ToDefaultPosition();
                     this.MouseClickEvent += cell.MouseClickEvent;
+                    //foreach (var figure in figureList) {
+                    //    cell.CellClickEvent += figure.CellClickEvent;
+                    // }
                 }
             }
+            desk.board[0][0].figure = whiteQueen;
+            whiteQueen.Position = desk.board[0][0].Position;
+            desk.board[0][1].figure = whiteKing;
+            whiteKing.Position = desk.board[0][1].Position;
             //queenPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,_graphics.PreferredBackBufferHeight / 2);
             base.Initialize();
             //base.Window.AllowUserResizing = true;
@@ -110,66 +121,37 @@ namespace ChessGL
             }
 
             // TODO: Add your update logic here
-            var mouse = Mouse.GetState();
-            var kstate = Keyboard.GetState();
+            var newMouse = Mouse.GetState();
+            //var kstate = Keyboard.GetState();
+            //MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
 
-            //if (kstate.IsKeyDown(Keys.Up))
-            if (mouse.LeftButton == ButtonState.Pressed)
+            int mouseAnswer = mouse.CheckClick(newMouse);
+            MouseClickEventArgs e = new MouseClickEventArgs { point = newMouse.Position, mouse = newMouse, clickNumber = 2 };
+            if (mouseAnswer == 1)
             {
-                message = pressed;
-                MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
-                //if (entitySelected)
-                //{
-                //    selectedFigure.Selected = false;
-                //    selectedFigure = null;
-                //    entitySelected = false;
-                    
-                //}
-                //else
-                //{
-                //    foreach (var figure in figureList)
-                //    {
-                //        if (figure.PointInFigureArea(mouse.Position))
-                //        {
-                //            // message += $"on figure {figure.ToString()}";
-                //            selectedFigure = figure;
-                //            selectedFigure.Selected = true;
-                //            entitySelected = true;
-                //            break;
-
-                //        }
-                //    }
-                    
-                //}
-                ///*foreach (var figure in figureList)
-                //{
-                //    if (figure.PointInFigureArea(mouse.Position))
-                //    {
-                //        message += $"on figure {figure.ToString()}";
-                //        movingFigure = figure;
-                //        break;
-
-                //    }
-                //}
-                //if (movingFigure != null)
-                //{
-                //    movingFigure.Position = mouse.Position;
-                //}
-                ////queenPosition = mouse.Position.ToVector2();
-                ////whiteQueen.Position = mouse.Position;
-                //// queenPosition.X = mouse.X;
-                //// queenPosition.Y = mouse.Y;*/
+                message = "1st click";
+                e.clickNumber = 1;
+                MouseClickEvent(this, e);
+                
+            }
+            else if (mouseAnswer == 2)
+            {
+                message = "2nd click";
+                e.clickNumber = 2;
+                MouseClickEvent(this, e);
+                if (e.startingFigure != null && e.endingCell != null)
+                {
+                    //check move
+                    //etc
+                    e.startingFigure.Position = e.endingCell.Position;
+                }
             }
             else
             {
-                message = notPressed;
+                message = "release";
             }
-            //if (entitySelected && selectedFigure.Selected)
-            //{
-
-            //    selectedFigure.Position = mouse.Position;
-            //}
-            message += " X: " + mouse.X.ToString() + " Y: " + mouse.Y.ToString() + " ";
+            
+            message += " X: " + newMouse.X.ToString() + " Y: " + newMouse.Y.ToString() + " ";
             message += entitySelected.ToString();
             message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
             base.Update(gameTime);
@@ -202,5 +184,10 @@ namespace ChessGL
     {
         public Point point;
         public MouseState mouse;
+        public int clickNumber;
+        public Cell? startingCell;
+        public Figure? startingFigure;
+        public Cell? endingCell;
+        public Figure? endingFigure;
     }
 }
