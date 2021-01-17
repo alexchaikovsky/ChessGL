@@ -17,7 +17,9 @@ namespace ChessGL.Moves
             board = new List<List<Cell>>();
             int rowCh = 1;
             int colCh = 97;
-            var point = new Point(48, 18);
+            int firstCellX = 32;
+            int firstCellY = 33;
+            var point = new Point(firstCellX, firstCellY);
             size = (int)(162*resizeOption);
             for (int i = 8; i >= 1; i--)
             
@@ -29,12 +31,13 @@ namespace ChessGL.Moves
                     var cell = new Cell(point, size);
                     cell.row = i;
                     cell.col = j;
+                    cell.Empty = true;
                     row.Add(cell);
 
                     point.X += size;
                     //Debug.WriteLine($"CELL {row}{(char)cell.col}\nPosition: {cell.Position.ToString()}");
                 }
-                point.X = 48;
+                point.X = firstCellX;
                 point.Y += size;
                 board.Add(row);
             }

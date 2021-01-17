@@ -46,33 +46,28 @@ namespace ChessGL.Moves
         {
             if (sender is Game)
             {
-                if (PointInEntityArea(e.point)) {
-                    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");
-                    e.endingCell = this;
+                //if (PointInEntityArea(e.point)) {
+                //    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");
+                //    e.endingCell = this;
                     
-                }
-                //switch (e.clickNumber)
-                //{
-                //    case 1:
-                //        if (PointInEntityArea(e.point))
-                //        {
-                //            e.startingCell = this as Cell;
-
-                //            //Selected = true;
-                //            Debug.WriteLine($"1st click CELL {this.MyName()}");
-                //            //CallAnswerEvent();
-                //        }
-                //        break;
-                //    case 2:
-                //        if (PointInEntityArea(e.point))
-                //        {
-                //            e.endingCell = this as Cell;
-                //            //Position = e.point;
-                //            //Selected = false;
-                //            Debug.WriteLine($"2nd click CELL {this.MyName()}");
-                //        }
-                //        break;
                 //}
+                switch (e.clickNumber)
+                {
+                    case 1:
+                        if (PointInEntityArea(e.point))
+                        {
+                            e.startingCell = this;
+                            Debug.WriteLine($"1st click CELL {this.MyName()}");
+                        }
+                        break;
+                    case 2:
+                        if (PointInEntityArea(e.point))
+                        {
+                            e.endingCell = this;
+                            Debug.WriteLine($"2nd click CELL {this.MyName()}");
+                        }
+                        break;
+                }
             }
         }
     }

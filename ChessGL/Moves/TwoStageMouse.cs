@@ -13,7 +13,7 @@ namespace ChessGL.Moves
     {
         MouseState lastMouseState;
         bool mousePressed;
-        bool firstClick;
+        public bool firstClick;
         public TwoStageMouse()
         {
             lastMouseState = new MouseState();

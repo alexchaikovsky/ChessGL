@@ -16,12 +16,15 @@ namespace ChessGL.Figures
         Single resizeRate = 0.15f;
         protected Point defaultPosition;
         public bool white;
+        public string thisTexturePath;
 
-        public void LoadTexture(Texture2D texture)
+
+        public virtual void LoadTexture(Texture2D texture)
         {
             this.texture = texture;
             this.pixelSize = (int)(resizeRate * texture.Width);
             this.Selectable = true;
+            this.Active = true;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -46,12 +49,16 @@ namespace ChessGL.Figures
         //    }
         //    return false;
         //}
-        public virtual bool PossibleMove()
+        public bool PossibleMove(Cell start, Cell end)
         {
-
-            return false;
+            if (start == null) Debug.WriteLine("start empty");
+            if (end == null) Debug.WriteLine("end empty");
+            return this.CheckMove(start, end);
         }
-
+        public virtual bool CheckMove(Cell start, Cell end)
+        {
+            return true;
+        }
         public virtual void ToDefaultPosition()
         {
             Position = defaultPosition;
@@ -141,6 +148,14 @@ namespace ChessGL.Figures
                             //Position = e.point;
                             Selected = false;
                             Debug.WriteLine($"MOVED {this.MyName()}");
+                        }
+                        else
+                        {
+                            if (PointInEntityArea(e.point))
+                            {
+                                Debug.WriteLine($"2ND CLICK {this.MyName()}");
+                                e.endingFigure = this;
+                            }
                         }
                         break;
                 }
