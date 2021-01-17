@@ -6,18 +6,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
     public abstract class SelectableEntity : ISelectableEntity
     {
         protected int pixelSize;
+        
         public bool Selected { get; set; }
         public bool Selectable { get; set; }
         public virtual Point Position { get; set; }
         public virtual string MyName()
         {
             return this.ToString();
+        }
+        public virtual void CallAnswerEvent()
+        {
+            return;
         }
         public bool PointInEntityArea(Point point)
         {
@@ -41,18 +47,50 @@ namespace ChessGL.Moves
             }
             return false;
         }
-        public void MouseClickEvent(object sender, MouseClickEventArgs e)
+        public virtual void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
             if (sender is Game)
             {
-                if (PointInEntityArea(e.point))
+                //Debug.WriteLine($"EVENT {this.MyName()}");
+                if (Selectable)
                 {
-                    if (e.mouse.LeftButton == ButtonState.Pressed)
+                    switch (e.clickNumber)
                     {
-                        this.Selected = true;
-                        Debug.WriteLine($"My name {this.MyName()}");
-                        //
+                        case 1:
+                            if (PointInEntityArea(e.point) && !Selected)
+                            {
+                                e.startingFigure = this as Figure;
+                                
+                                Selected = true;
+                                Debug.WriteLine($"SELECTED {this.MyName()}");
+                                CallAnswerEvent();
+                            }
+                            break;
+                        case 2:
+                            if (Selected)
+                            {
+                                if(this is Figure) {
+                                    e.startingFigure = this as Figure;
+                                }
+                                Position = e.point;
+                                Selected = false;
+                                Debug.WriteLine($"MOVED {this.MyName()}");
+                            }
+                            break;
                     }
+                    
+                }
+                else
+                {
+                    //if (PointInEntityArea(e.point))
+                    //{
+                    //    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");
+                    //    if (this is Cell)
+                    //    {
+                    //        e.cell = this as Cell;
+                    //    }
+                    //    //CallAnswerEvent();
+                    //}
                 }
             }
         }

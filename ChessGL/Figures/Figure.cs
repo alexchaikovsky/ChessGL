@@ -15,12 +15,13 @@ namespace ChessGL.Figures
         Texture2D texture;
         Single resizeRate = 0.15f;
         protected Point defaultPosition;
-        protected bool white;
+        public bool white;
 
         public void LoadTexture(Texture2D texture)
         {
             this.texture = texture;
             this.pixelSize = (int)(resizeRate * texture.Width);
+            this.Selectable = true;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -57,22 +58,94 @@ namespace ChessGL.Figures
         }
         public override string MyName()
         {
-            return $"Figure {this.ToString()}";
+            return $"Figure {this.ToString()} Position: {Position.ToString()}";
         }
-        //public void MouseClickEvent(object sender, MouseClickEventArgs e)
-        //{
-        //    if (sender is Game)
-        //    {
-        //        if (PointInFigureArea(e.point))
-        //        {
-        //            if (e.mouse.LeftButton == ButtonState.Pressed)
-        //            {
-        //                this.Selected = true;
-        //                //
-        //            }
-        //        }
-        //    }
-        //} 
+        public void CellClickEvent(object sender, CellEventArgs e)
+        {
+            if (Selected)
+            {
+                if (sender is Cell)
+                {
+                    Cell cell = sender as Cell;
+
+
+                    if (Position != cell.Position )
+                    {
+                        if (cell.figure != null)
+                        {
+                            if (cell.figure.white != this.white)
+                            {
+                                Position = cell.Position;
+                                cell.figure = this;
+                                Selected = false;
+                                Debug.WriteLine($"MOVED {this.ToString()} TO CELL {cell.row}{(char)cell.col}");
+                            }
+                        }
+                        else
+                        {
+                            Position = cell.Position;
+                            cell.figure = this;
+                            Selected = false;
+                            Debug.WriteLine($"MOVED {this.ToString()} TO CELL {cell.row}{(char)cell.col}");
+                        }
+                        
+                    }
+                    
+                }
+            }
+            else
+            {
+                Cell cell = sender as Cell;
+                if (Position == cell.Position)
+                {
+                    //Position = cell.Position;
+                    if (cell.figure != null)
+                    {
+                        if (this.white != cell.figure.white)
+                        {
+                            Active = false;
+                        }
+                        Selected = false;
+                        Debug.WriteLine($"FIGURE {this.ToString()} ON CELL {cell.row}{(char)cell.col}");
+                    }
+                }
+                
+            }
+        }
+        public bool Active { get; set; }
+        public override void MouseClickEvent(object sender, MouseClickEventArgs e)
+        {
+            if (sender is Game)
+            {
+                switch (e.clickNumber)
+                {
+                    case 1:
+                        //Debug.WriteLine($"figure case 1");
+                        if (PointInEntityArea(e.point) && !Selected)
+                        {
+                            e.startingFigure = this as Figure;
+
+                            Selected = true;
+                            Debug.WriteLine($"SELECTED {this.MyName()}");
+                            CallAnswerEvent();
+                        }
+                        break;
+                    case 2:
+                        //Debug.WriteLine($"figure case 2");
+                        if (Selected)
+                        {
+                            if (this is Figure)
+                            {
+                                e.startingFigure = this as Figure;
+                            }
+                            //Position = e.point;
+                            Selected = false;
+                            Debug.WriteLine($"MOVED {this.MyName()}");
+                        }
+                        break;
+                }
+            }
+        }
 
     }
 }
