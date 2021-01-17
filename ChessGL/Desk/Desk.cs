@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
@@ -12,11 +13,12 @@ namespace ChessGL.Moves
     {
         public List<List<Cell>> board;
         int size;
-        public Desk(Single resizeOption = 1)
+        int whitePerspective; // 1 if player plays white else -1
+        public Desk(Single resizeOption = 1, int whitePerspective = -1)
         {
+            this.whitePerspective = whitePerspective;
             board = new List<List<Cell>>();
-            int rowCh = 1;
-            int colCh = 97;
+            
             int firstCellX = 32;
             int firstCellY = 33;
             var point = new Point(firstCellX, firstCellY);
@@ -26,7 +28,7 @@ namespace ChessGL.Moves
             {
      
                 var row = new List<Cell>();
-                for (int j = 97; j <= 105; j++)
+                for (int j = 97; j <= 104; j++)
                 {
                     var cell = new Cell(point, size);
                     cell.row = i;
@@ -46,6 +48,31 @@ namespace ChessGL.Moves
         public void UpdateTexturesSize(Single resizeOption)
         {
             size = (int)(162 * resizeOption);
+        }
+        public void ShowPath(Cell pathStartingCell, Figure figure)
+        {
+            var figurePath = new List<Cell>();
+            foreach (var row in board)
+            {
+                foreach (var cell in row)
+                {
+                    if (figure.PossibleMove(pathStartingCell, cell))
+                    {
+                        //figurePath.Add(cell);
+                        cell.Show = true;
+                    }
+                }
+            }
+        }
+        public void ShutPath()
+        {
+            foreach (var row in board)
+            {
+                foreach (var cell in row)
+                {
+                    cell.Show = false;
+                }
+            }
         }
     }
 }

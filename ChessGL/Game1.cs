@@ -92,6 +92,7 @@ namespace ChessGL
                 {
                    // figure.ToDefaultPosition();
                     this.MouseClickEvent += cell.MouseClickEvent;
+                    cell.LoadTexture(Content.Load<Texture2D>("green_circle"));
                     //foreach (var figure in figureList) {
                     //    cell.CellClickEvent += figure.CellClickEvent;
                     // }
@@ -159,10 +160,15 @@ namespace ChessGL
                 {
                     mouse.firstClick = true;
                 }
+                else
+                {
+                    desk.ShowPath(e.startingCell, e.startingFigure);
+                }
                 
             }
             else if (mouseAnswer == 2)
             {
+                desk.ShutPath();
                 
                 e.clickNumber = 2;
                 MouseClickEvent(this, e);
@@ -179,6 +185,7 @@ namespace ChessGL
                         {
                             e.startingFigure.Position = e.endingCell.Position;
                             e.endingCell.Empty = false;
+                            e.startingCell.Empty = true;
 
                         }
                     }
@@ -191,6 +198,7 @@ namespace ChessGL
                                 e.startingFigure.Position = e.endingCell.Position;
                                 e.endingCell.Empty = false;
                                 e.endingFigure.Active = false;
+                                e.startingCell.Empty = true;
 
                             }
                         }
@@ -226,6 +234,16 @@ namespace ChessGL
             _spriteBatch.Begin();
             _spriteBatch.Draw(deskTexture, new Vector2(0, 30), null, Color.White, 0, new Vector2(0, 0), 0.7f, SpriteEffects.None, 0);
             //_spriteBatch.Draw(queenTexture, queenPosition, null,  Color.White, 0, new Vector2(queenTexture.Width/2, queenTexture.Height/2), 0.15f, SpriteEffects.None, 1);
+            foreach (var row in desk.board)
+            {
+                foreach (var cell in row)
+                {
+                    if (cell.Show)
+                    {
+                        cell.Draw(_spriteBatch);
+                    }
+                }
+            }
             foreach (var figure in figureList)
             {
                 figure.Draw(_spriteBatch);

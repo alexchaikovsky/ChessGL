@@ -22,7 +22,7 @@ namespace ChessGL.Figures
         {
             if (start.row - end.row == -1)
             {
-                return start.col - end.col == 0 || (Math.Abs(start.col - end.col) == 1 && !end.Empty);
+                return (start.col - end.col == 0 && end.Empty) || (Math.Abs(start.col - end.col) == 1 && !end.Empty);
             }
             return false;
            

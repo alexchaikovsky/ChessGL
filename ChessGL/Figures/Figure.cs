@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ChessGL;
+using ChessGL.Moves;
 using System.Diagnostics;
 
 namespace ChessGL.Figures
@@ -59,6 +60,7 @@ namespace ChessGL.Figures
         {
             return true;
         }
+
         public virtual void ToDefaultPosition()
         {
             Position = defaultPosition;

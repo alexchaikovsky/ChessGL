@@ -10,7 +10,10 @@ namespace ChessGL.Moves
 {
     public class Cell : SelectableEntity
     {
-       // private Point position;
+        // private Point position;
+        Texture2D texture;
+        SpriteBatch spriteBatch;
+        
         public int row;
         public int col;
         public Figure? figure;
@@ -19,8 +22,14 @@ namespace ChessGL.Moves
             Position = position;
             //this.name = name;
             this.pixelSize = size;
+            //Show = true;
+            
         }
-        
+        public bool Show { get; set; }
+        public virtual void LoadTexture(Texture2D texture)
+        {
+            this.texture = texture;
+        }
         public bool Empty { get; set; }
         public override string MyName()
         {
@@ -69,6 +78,11 @@ namespace ChessGL.Moves
                         break;
                 }
             }
+        }
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            //spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(pixelSize / 2, pixelSize / 2), 0.15f, SpriteEffects.None, 1);
+            spriteBatch.Draw(texture, Position.ToVector2() + new Vector2(this.pixelSize / 3, this.pixelSize / 3), null, Color.White, 0, new Vector2(0, 0), 0.03f, SpriteEffects.None, 1);
         }
     }
     public class CellEventArgs : EventArgs
