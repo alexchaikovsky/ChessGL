@@ -44,6 +44,18 @@
 /processorParam:TextureFormat=Color
 /build:desk.png
 
+#begin frame.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:frame.png
+
 #begin green_circle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -55,6 +67,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:green_circle.png
+
+#begin white_bishop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:white_bishop.png
 
 #begin white_king.png
 /importer:TextureImporter
@@ -68,6 +92,30 @@
 /processorParam:TextureFormat=Color
 /build:white_king.png
 
+#begin white_knight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:white_knight.png
+
+#begin white_pawn.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:white_pawn.png
+
 #begin white_queen.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -79,4 +127,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:white_queen.png
+
+#begin white_rook.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:white_rook.png
 

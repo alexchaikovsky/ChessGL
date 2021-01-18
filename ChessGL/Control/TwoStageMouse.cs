@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
-using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
@@ -51,7 +45,7 @@ namespace ChessGL.Moves
                 lastMouseState = mouseState;
                 return -1;
             }
-            
+
             return 0;
         }
     }

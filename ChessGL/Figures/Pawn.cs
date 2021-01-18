@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Moves;
+﻿using ChessGL.Moves;
+using System;
 
 namespace ChessGL.Figures
 {
-    class Pawn : Figure
+    class Pawn : Figure, IMovePawn
     {
-        public Pawn(bool white)
+        public Pawn(bool white, Cell defaultCell)
         {
             this.white = white;
+            this.defaultCell = defaultCell;
             if (white)
             {
+                thisTexturePath = "white_pawn";
             }
             else
             {
@@ -25,7 +25,7 @@ namespace ChessGL.Figures
                 return (start.col - end.col == 0 && end.Empty) || (Math.Abs(start.col - end.col) == 1 && !end.Empty);
             }
             return false;
-           
+
         }
     }
 }

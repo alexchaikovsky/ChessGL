@@ -1,8 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ChessGL.Figures;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ChessGL;
-using ChessGL.Figures;
 using System;
 using System.Diagnostics;
 
@@ -12,8 +10,9 @@ namespace ChessGL.Moves
     {
         // private Point position;
         Texture2D texture;
+        Texture2D frameTexture;
         SpriteBatch spriteBatch;
-        
+
         public int row;
         public int col;
         public Figure? figure;
@@ -22,18 +21,24 @@ namespace ChessGL.Moves
             Position = position;
             //this.name = name;
             this.pixelSize = size;
+            Empty = true;
             //Show = true;
-            
+
         }
         public bool Show { get; set; }
-        public virtual void LoadTexture(Texture2D texture)
+        public virtual void LoadTexture(Texture2D texture, Texture2D frameTexture)
         {
             this.texture = texture;
+            this.frameTexture = frameTexture;
         }
         public bool Empty { get; set; }
         public override string MyName()
         {
             return $"CELL {row}{(char)col} Position: {Position.ToString()}";
+        }
+        public override string ToString()
+        {
+            return $"Cell {row}{(char)col}";
         }
         public override void CallAnswerEvent()
         {
@@ -58,7 +63,7 @@ namespace ChessGL.Moves
                 //if (PointInEntityArea(e.point)) {
                 //    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");
                 //    e.endingCell = this;
-                    
+
                 //}
                 switch (e.clickNumber)
                 {
@@ -82,12 +87,19 @@ namespace ChessGL.Moves
         public void Draw(SpriteBatch spriteBatch)
         {
             //spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(pixelSize / 2, pixelSize / 2), 0.15f, SpriteEffects.None, 1);
-            spriteBatch.Draw(texture, Position.ToVector2() + new Vector2(this.pixelSize / 3, this.pixelSize / 3), null, Color.White, 0, new Vector2(0, 0), 0.03f, SpriteEffects.None, 1);
+            if (Empty)
+            {
+                spriteBatch.Draw(texture, Position.ToVector2() + new Vector2(this.pixelSize / 3, this.pixelSize / 3), null, Color.White, 0, new Vector2(0, 0), 0.03f, SpriteEffects.None, 1);
+            }
+            else
+            {
+                spriteBatch.Draw(frameTexture, Position.ToVector2() + new Vector2(0, 5), null, Color.White, 0, new Vector2(0, 0), 0.3f, SpriteEffects.None, 1);
+            }
         }
     }
     public class CellEventArgs : EventArgs
     {
         public Figure? figure;
-        
+
     }
 }

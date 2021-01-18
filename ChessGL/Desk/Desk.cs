@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ChessGL.Figures;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
@@ -18,15 +15,15 @@ namespace ChessGL.Moves
         {
             this.whitePerspective = whitePerspective;
             board = new List<List<Cell>>();
-            
+
             int firstCellX = 32;
             int firstCellY = 33;
             var point = new Point(firstCellX, firstCellY);
-            size = (int)(162*resizeOption);
+            size = (int)(162 * resizeOption);
             for (int i = 8; i >= 1; i--)
-            
+
             {
-     
+
                 var row = new List<Cell>();
                 for (int j = 97; j <= 104; j++)
                 {
@@ -43,26 +40,47 @@ namespace ChessGL.Moves
                 point.Y += size;
                 board.Add(row);
             }
-            
+
         }
         public void UpdateTexturesSize(Single resizeOption)
         {
             size = (int)(162 * resizeOption);
         }
-        public void ShowPath(Cell pathStartingCell, Figure figure)
+        public List<Cell> ShowPath(Cell pathStartingCell, Figure figure)
         {
-            var figurePath = new List<Cell>();
-            foreach (var row in board)
+            Debug.WriteLine($"{board.Count}, {board[0].Count}\n{board[1][2].ToString()}");
+            var path = new List<Cell>();
+            if (figure is IMoveStraight)
             {
-                foreach (var cell in row)
-                {
-                    if (figure.PossibleMove(pathStartingCell, cell))
-                    {
-                        //figurePath.Add(cell);
-                        cell.Show = true;
-                    }
-                }
+                figure.PrintDebug();
+                IMoveStraight moveFigure = figure as IMoveStraight;
+                path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
             }
+            if (figure is IMoveDiag)
+            {
+                figure.PrintDebug();
+                IMoveDiag moveFigure = figure as IMoveDiag;
+                path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
+            }
+            if (figure is IMovePawn)
+            {
+                figure.PrintDebug();
+                IMovePawn moveFigure = figure as IMovePawn;
+                path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
+            }
+            //var figurePath = new List<Cell>();
+            //foreach (var row in board)
+            //{
+            //    foreach (var cell in row)
+            //    {
+            //        if (figure.PossibleMove(pathStartingCell, cell))
+            //        {
+            //            //figurePath.Add(cell);
+            //            cell.Show = true;
+            //        }
+            //    }
+            //}
+            return path;
         }
         public void ShutPath()
         {
@@ -71,6 +89,17 @@ namespace ChessGL.Moves
                 foreach (var cell in row)
                 {
                     cell.Show = false;
+                }
+            }
+        }
+        public void ToDefaultSet()
+        {
+            foreach(var row in board)
+            {
+                foreach(var cell in row)
+                {
+                    cell.Empty = true;
+                    cell.figure = null;
                 }
             }
         }

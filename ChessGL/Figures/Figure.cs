@@ -1,25 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Moves;
+﻿using ChessGL.Moves;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ChessGL;
-using ChessGL.Moves;
+using System;
 using System.Diagnostics;
 
 namespace ChessGL.Figures
 {
     public abstract class Figure : SelectableEntity
     {
+        protected Cell defaultCell;
         Texture2D texture;
         Single resizeRate = 0.15f;
         protected Point defaultPosition;
         public bool white;
         public string thisTexturePath;
 
-
+        //public Figure(bool white, Cell defaultCell)
+        //{
+        //    this.white = white;
+        //    this.defaultCell = defaultCell;
+        //}
+        public bool CanEat(Figure figure)
+        {
+            if (figure == null)
+            {
+                return false;
+            }
+            return figure.white ^ this.white;
+        }
+        public Point GetDefaultPosition()
+        {
+            return defaultCell.Position;
+        }
         public virtual void LoadTexture(Texture2D texture)
         {
             this.texture = texture;
@@ -40,7 +52,7 @@ namespace ChessGL.Figures
         //    int AreaYR = (int)(Position.Y + texture.Height * resizeRate / 2 );
         //    Debug.WriteLine(point.ToString());
         //    Debug.WriteLine($"W = {texture.Width}, H = {texture.Height}");
-        
+
         //    if (point.X >= AreaXL / 2 && point.X <= AreaXR)
         //    {
         //        if (point.Y >= AreaYL - texture.Height / 2 && point.Y <= AreaYR)
@@ -63,11 +75,38 @@ namespace ChessGL.Figures
 
         public virtual void ToDefaultPosition()
         {
-            Position = defaultPosition;
+            //Position = defaultPosition;
+            Move(defaultCell);
         }
         public override string MyName()
         {
             return $"Figure {this.ToString()} Position: {Position.ToString()}";
+        }
+        public void PrintDebug()
+        {
+            Debug.WriteLine("Inside " + MyName());
+        }
+
+        public bool Move(Cell cell)
+        {
+            Debug.WriteLine("MOVE " + MyName() + $"CELL {cell.row}{(char)cell.col}");
+            Position = cell.Position;
+            cell.figure = this;
+            cell.Empty = false;
+            return true;
+        }
+        public bool Move(Cell start, Cell end)
+        {
+            Move(end);
+            start.Empty = true;
+            start.figure = null;
+            return true;
+        }
+        public bool Move(Cell start, Cell end, Figure prev)
+        {
+            Move(start, end);
+            prev.Active = false;
+            return true;
         }
         public void CellClickEvent(object sender, CellEventArgs e)
         {
@@ -78,7 +117,7 @@ namespace ChessGL.Figures
                     Cell cell = sender as Cell;
 
 
-                    if (Position != cell.Position )
+                    if (Position != cell.Position)
                     {
                         if (cell.figure != null)
                         {
@@ -97,9 +136,9 @@ namespace ChessGL.Figures
                             Selected = false;
                             Debug.WriteLine($"MOVED {this.ToString()} TO CELL {cell.row}{(char)cell.col}");
                         }
-                        
+
                     }
-                    
+
                 }
             }
             else
@@ -118,7 +157,7 @@ namespace ChessGL.Figures
                         Debug.WriteLine($"FIGURE {this.ToString()} ON CELL {cell.row}{(char)cell.col}");
                     }
                 }
-                
+
             }
         }
         public bool Active { get; set; }
@@ -149,13 +188,13 @@ namespace ChessGL.Figures
                             }
                             //Position = e.point;
                             Selected = false;
-                            Debug.WriteLine($"MOVED {this.MyName()}");
+                            //Debug.WriteLine($"MOVED {this.MyName()}");
                         }
                         else
                         {
                             if (PointInEntityArea(e.point))
                             {
-                                Debug.WriteLine($"2ND CLICK {this.MyName()}");
+                                //Debug.WriteLine($"2ND CLICK {this.MyName()}");
                                 e.endingFigure = this;
                             }
                         }

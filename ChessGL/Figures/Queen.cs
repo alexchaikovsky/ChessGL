@@ -1,27 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ChessGL.Moves;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ChessGL;
-using ChessGL.Moves;
+using System;
 
 namespace ChessGL.Figures
 {
-    public class Queen : Figure
+    public class Queen : Figure, IMoveStraight, IMoveDiag
     {
-        public Queen(bool white)
+        public Queen(bool white, Cell defaultCell = null)
         {
             this.white = white;
-            if (white)
-            {
-                this.defaultPosition = new Point(100, 500);
-            }
-            else
-            {
-                this.defaultPosition = new Point(100, 100);
-            }
+            this.defaultCell = defaultCell;
         }
         public override bool CheckMove(Cell start, Cell end)
         {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChessGL.Moves
+﻿namespace ChessGL.Moves
 {
     public class Position
     {

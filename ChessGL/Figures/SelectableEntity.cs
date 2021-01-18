@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Moves;
+﻿using ChessGL.Figures;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
-using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
     public abstract class SelectableEntity : ISelectableEntity
     {
         protected int pixelSize;
-        
+
         public bool Selected { get; set; }
         public bool Selectable { get; set; }
         public virtual Point Position { get; set; }
@@ -60,7 +54,7 @@ namespace ChessGL.Moves
                             if (PointInEntityArea(e.point) && !Selected)
                             {
                                 e.startingFigure = this as Figure;
-                                
+
                                 Selected = true;
                                 Debug.WriteLine($"SELECTED {this.MyName()}");
                                 CallAnswerEvent();
@@ -69,7 +63,8 @@ namespace ChessGL.Moves
                         case 2:
                             if (Selected)
                             {
-                                if(this is Figure) {
+                                if (this is Figure)
+                                {
                                     e.startingFigure = this as Figure;
                                 }
                                 Position = e.point;
@@ -78,7 +73,7 @@ namespace ChessGL.Moves
                             }
                             break;
                     }
-                    
+
                 }
                 else
                 {

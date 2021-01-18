@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using ChessGL.Moves;
+
 namespace ChessGL.Figures
 {
-    class King : Figure
+    class King : Figure, IMoveStraight, IMoveDiag
     {
-        public King (bool white)
+        public King(bool white, Cell defaultCell)
         {
             this.white = white;
+            this.defaultCell = defaultCell;
             if (white)
             {
                 thisTexturePath = "white_king";

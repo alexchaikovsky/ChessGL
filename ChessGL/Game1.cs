@@ -1,17 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ChessGL.Figures;
+using ChessGL.Moves;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Text;
 using System;
 using System.Collections.Generic;
-using ChessGL.Figures;
-using ChessGL.Moves;
 using System.Diagnostics;
 
 namespace ChessGL
 {
     public class Game1 : Game
     {
+        List<Cell> currentPath;
         Texture2D queenTexture;
         Texture2D deskTexture;
         MouseClickEventArgs e;
@@ -33,12 +33,12 @@ namespace ChessGL
         string notPressed = "Not Pressed";
 
         string message = "Init";
-        List <Figure> figureList;
+        List<Figure> figureList;
         Desk desk;
         //MouseState mouse;
 
 
-        
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -57,55 +57,97 @@ namespace ChessGL
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            currentPath = new List<Cell>();
             mouse = new TwoStageMouse();
             desk = new Desk(0.7f);
             figureList = new List<Figure>();
             e = new MouseClickEventArgs();
-            whiteQueen = new Queen(true);
+            whiteQueen = new Queen(true, desk.board[0][3]);
             //whiteQueen.Position = new Point(100, 100);
             figureList.Add(whiteQueen);
 
-            whiteKing = new King(true);
+            whiteKing = new King(true, desk.board[0][4]);
             //whiteKing.Position = new Point(200, 100);
             figureList.Add(whiteKing);
+
+            var whiteBishop1 = new Bishop(true, desk.board[0][5]);
+            whiteBishop1.Move(desk.board[0][5]);
+            whiteBishop1.LoadTexture(Content.Load<Texture2D>("white_bishop"));
+            figureList.Add(whiteBishop1);
+
+            var whiteBishop2 = new Bishop(true, desk.board[0][2]);
+            whiteBishop2.Move(desk.board[0][2]);
+            whiteBishop2.LoadTexture(Content.Load<Texture2D>("white_bishop"));
+            figureList.Add(whiteBishop2);
+
+            var whiteRook1 = new Rook(true, desk.board[0][7]);
+            whiteRook1.Move(desk.board[0][7]);
+            whiteRook1.LoadTexture(Content.Load<Texture2D>("white_rook"));
+            figureList.Add(whiteRook1);
+            var whiteRook2 = new Rook(true, desk.board[0][0]);
+            whiteRook2.Move(desk.board[0][0]);
+            whiteRook2.LoadTexture(Content.Load<Texture2D>("white_rook"));
+            figureList.Add(whiteRook2);
+
+            var whiteKnight1 = new Knight(true, desk.board[0][6]);
+            whiteKnight1.Move(desk.board[0][6]);
+            whiteKnight1.LoadTexture(Content.Load<Texture2D>("white_knight"));
+            figureList.Add(whiteKnight1);
+            var whiteKnight2 = new Knight(true, desk.board[0][1]);
+            whiteKnight2.Move(desk.board[0][1]);
+            whiteKnight2.LoadTexture(Content.Load<Texture2D>("white_knight"));
+            figureList.Add(whiteKnight2);
+
+
+            //Init pawns
             for (int i = 0; i < 8; i++)
             {
-                var blackPawn = new Pawn(false);
-                //blackPawn.white = true;
+                var blackPawn = new Pawn(false, desk.board[6][i]);
+                //blackPawn.white = ;
                 blackPawn.LoadTexture(Content.Load<Texture2D>(blackPawn.thisTexturePath));
-                desk.board[6][i].figure = blackPawn;
-                desk.board[6][i].Empty = false;
-                blackPawn.Position = desk.board[6][i].Position;
+                //desk.board[6][i].figure = blackPawn;
+                //desk.board[6][i].Empty = false;
+                //blackPawn.Position = desk.board[6][i].Position;
+                blackPawn.Move(desk.board[6][i]);
                 Debug.WriteLine($"Pawn {i} Pos{blackPawn.Position.ToString()}");
                 figureList.Add(blackPawn);
-                
+
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                var whitePawn = new Pawn(true, desk.board[1][i]);
+                whitePawn.LoadTexture(Content.Load<Texture2D>(whitePawn.thisTexturePath));
+                whitePawn.Move(desk.board[1][i]);
+                //Debug.WriteLine($"Pawn {i} Pos{whitePawn.Position.ToString()}");
+                figureList.Add(whitePawn);
+
             }
             foreach (var figure in figureList)
             {
                 //figure.ToDefaultPosition();
                 this.MouseClickEvent += figure.MouseClickEvent;
-                
+
             }
             foreach (var row in desk.board)
             {
                 foreach (var cell in row)
                 {
-                   // figure.ToDefaultPosition();
+                    // figure.ToDefaultPosition();
                     this.MouseClickEvent += cell.MouseClickEvent;
-                    cell.LoadTexture(Content.Load<Texture2D>("green_circle"));
+                    cell.LoadTexture(Content.Load<Texture2D>("green_circle"), Content.Load<Texture2D>("frame"));
                     //foreach (var figure in figureList) {
                     //    cell.CellClickEvent += figure.CellClickEvent;
                     // }
                 }
             }
-            desk.board[0][0].figure = whiteQueen;
-            desk.board[0][0].Empty = false;
-            whiteQueen.Position = desk.board[0][0].Position;
-            desk.board[0][1].figure = whiteKing;
-            desk.board[0][1].Empty = false;
-            whiteKing.Position = desk.board[0][1].Position;
+            desk.board[0][3].figure = whiteQueen;
+            desk.board[0][3].Empty = false;
+            whiteQueen.Position = desk.board[0][3].Position;
+            desk.board[0][4].figure = whiteKing;
+            desk.board[0][4].Empty = false;
+            whiteKing.Position = desk.board[0][4].Position;
 
-            
+
             //queenPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,_graphics.PreferredBackBufferHeight / 2);
             base.Initialize();
             base.Window.AllowUserResizing = true;
@@ -137,8 +179,14 @@ namespace ChessGL
             }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.R))
             {
+                desk.ToDefaultSet();
                 foreach (var figure in figureList)
                 {
+                    if (!figure.Active)
+                    {
+                        MouseClickEvent += figure.MouseClickEvent;
+                        figure.Active = true;
+                    }
                     figure.ToDefaultPosition();
                 }
             }
@@ -159,33 +207,38 @@ namespace ChessGL
                 if (e.startingFigure == null)
                 {
                     mouse.firstClick = true;
+
                 }
                 else
                 {
-                    desk.ShowPath(e.startingCell, e.startingFigure);
+                    currentPath =  desk.ShowPath(e.startingCell, e.startingFigure);
                 }
-                
+
             }
             else if (mouseAnswer == 2)
             {
                 desk.ShutPath();
-                
+
                 e.clickNumber = 2;
                 MouseClickEvent(this, e);
                 message = "2nd click";
-                Debug.WriteLine($"START {e.startingCell?.ToString()} {e.startingFigure?.ToString()}"
-                    + $"\nEND {e.endingCell?.ToString()} {e.endingFigure?.ToString()}");
+                //Debug.WriteLine($"START {e.startingCell?.ToString()} {e.startingFigure?.ToString()}"
+                //    + $"\nEND {e.endingCell?.ToString()} {e.endingFigure?.ToString()}");
                 if (e.startingFigure != null && e.endingCell != null)
                 {
                     //check move
                     //etc
                     if (e.endingFigure == null)
                     {
-                        if (e.startingFigure.PossibleMove(e.startingCell, e.endingCell))
+                        //if (e.startingFigure.PossibleMove(e.startingCell, e.endingCell))
+                        if (currentPath.Contains(e.endingCell))
                         {
-                            e.startingFigure.Position = e.endingCell.Position;
-                            e.endingCell.Empty = false;
-                            e.startingCell.Empty = true;
+                            e.startingFigure.Move(e.startingCell, e.endingCell);
+                            //e.startingFigure.Position = e.endingCell.Position;
+                            //e.endingCell.Empty = false;
+                            //e.endingCell.figure = e.startingFigure;
+                            //e.startingCell.Empty = true;
+                            //e.startingCell.figure = null;
 
                         }
                     }
@@ -193,12 +246,17 @@ namespace ChessGL
                     {
                         if (e.endingFigure.white ^ e.startingFigure.white)
                         {
-                            if (e.startingFigure.PossibleMove(e.startingCell, e.endingCell))
+                            //if (e.startingFigure.PossibleMove(e.startingCell, e.endingCell))
+                            if (currentPath.Contains(e.endingCell))
                             {
-                                e.startingFigure.Position = e.endingCell.Position;
-                                e.endingCell.Empty = false;
-                                e.endingFigure.Active = false;
-                                e.startingCell.Empty = true;
+                                e.startingFigure.Move(e.startingCell, e.endingCell, e.endingFigure);
+                                //e.startingFigure.Position = e.endingCell.Position;
+                                //e.endingCell.Empty = false;
+                                //e.endingCell.figure = e.startingFigure;
+                                //e.endingFigure.Active = false;
+                                //e.startingCell.Empty = true;
+                                //e.startingCell.figure = null;
+                                
 
                             }
                         }
@@ -213,16 +271,16 @@ namespace ChessGL
             {
                 message = "release";
             }
-            
+
             message += " X: " + newMouse.X.ToString() + " Y: " + newMouse.Y.ToString() + " ";
             message += entitySelected.ToString();
             message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
 
-            foreach(var figure in figureList)
+            foreach (var figure in figureList)
             {
                 if (!figure.Active) { MouseClickEvent -= figure.MouseClickEvent; }
             }
-            figureList.RemoveAll(x => x.Active == false);
+            //figureList.RemoveAll(x => x.Active == false);
 
             base.Update(gameTime);
         }
@@ -246,7 +304,10 @@ namespace ChessGL
             }
             foreach (var figure in figureList)
             {
-                figure.Draw(_spriteBatch);
+                if (figure.Active)
+                {
+                    figure.Draw(_spriteBatch);
+                }
             }
             _spriteBatch.DrawString(font, message, new Vector2(0, 0), Color.White);
             _spriteBatch.End();
@@ -260,7 +321,7 @@ namespace ChessGL
         }
         public event EventHandler<MouseClickEventArgs> MouseClickEvent;
     }
-    public class MouseClickEventArgs: EventArgs
+    public class MouseClickEventArgs : EventArgs
     {
         public Point point;
         public MouseState mouse;
