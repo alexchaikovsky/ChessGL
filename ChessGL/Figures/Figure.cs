@@ -44,24 +44,6 @@ namespace ChessGL.Figures
             //spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(pixelSize / 2, pixelSize / 2), 0.15f, SpriteEffects.None, 1);
             spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(0, 0), 0.15f, SpriteEffects.None, 1);
         }
-        //public bool PointInFigureArea(Point point)
-        //{
-        //    int AreaXL = (int)(Position.X - texture.Width * resizeRate / 2);
-        //    int AreaXR = (int)(Position.Y + texture.Height * resizeRate / 2);
-        //    int AreaYL = (int)(Position.X - texture.Width * resizeRate / 2);
-        //    int AreaYR = (int)(Position.Y + texture.Height * resizeRate / 2 );
-        //    Debug.WriteLine(point.ToString());
-        //    Debug.WriteLine($"W = {texture.Width}, H = {texture.Height}");
-
-        //    if (point.X >= AreaXL / 2 && point.X <= AreaXR)
-        //    {
-        //        if (point.Y >= AreaYL - texture.Height / 2 && point.Y <= AreaYR)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
         public bool PossibleMove(Cell start, Cell end)
         {
             if (start == null) Debug.WriteLine("start empty");
@@ -106,6 +88,7 @@ namespace ChessGL.Figures
         {
             Move(start, end);
             prev.Active = false;
+            Debug.WriteLine(prev.MyName() + "no more active");
             return true;
         }
         public void CellClickEvent(object sender, CellEventArgs e)

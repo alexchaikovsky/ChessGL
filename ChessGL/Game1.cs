@@ -18,6 +18,7 @@ namespace ChessGL
         //private MouseState lastMouseState = new MouseState();
         TwoStageMouse mouse;
         bool entitySelected = false;
+        bool whitesMove = true;
         bool mousePressed = false;
         //ISelectableEntity selectedEntity;
         Figure selectedFigure;
@@ -62,6 +63,16 @@ namespace ChessGL
             desk = new Desk(0.7f);
             figureList = new List<Figure>();
             e = new MouseClickEventArgs();
+            var blackQueen = new Queen(false, desk.board[7][3]);
+            blackQueen.Move(desk.board[7][3]);
+            blackQueen.LoadTexture(Content.Load<Texture2D>("black_queen"));
+            figureList.Add(blackQueen);
+
+            var blackKing = new King(false, desk.board[7][4]);
+            blackKing.Move(desk.board[7][4]);
+            blackKing.LoadTexture(Content.Load<Texture2D>("black_king"));
+            figureList.Add(blackKing);
+
             whiteQueen = new Queen(true, desk.board[0][3]);
             //whiteQueen.Position = new Point(100, 100);
             figureList.Add(whiteQueen);
@@ -74,11 +85,19 @@ namespace ChessGL
             whiteBishop1.Move(desk.board[0][5]);
             whiteBishop1.LoadTexture(Content.Load<Texture2D>("white_bishop"));
             figureList.Add(whiteBishop1);
-
             var whiteBishop2 = new Bishop(true, desk.board[0][2]);
             whiteBishop2.Move(desk.board[0][2]);
             whiteBishop2.LoadTexture(Content.Load<Texture2D>("white_bishop"));
             figureList.Add(whiteBishop2);
+
+            var blackBishop1 = new Bishop(false, desk.board[7][5]);
+            blackBishop1.Move(desk.board[7][5]);
+            blackBishop1.LoadTexture(Content.Load<Texture2D>("black_bishop"));
+            figureList.Add(blackBishop1);
+            var blackBishop2 = new Bishop(false, desk.board[7][2]);
+            blackBishop2.Move(desk.board[7][2]);
+            blackBishop2.LoadTexture(Content.Load<Texture2D>("black_bishop"));
+            figureList.Add(blackBishop2);
 
             var whiteRook1 = new Rook(true, desk.board[0][7]);
             whiteRook1.Move(desk.board[0][7]);
@@ -89,6 +108,15 @@ namespace ChessGL
             whiteRook2.LoadTexture(Content.Load<Texture2D>("white_rook"));
             figureList.Add(whiteRook2);
 
+            var blackRook1 = new Rook(false, desk.board[7][7]);
+            blackRook1.Move(desk.board[7][7]);
+            blackRook1.LoadTexture(Content.Load<Texture2D>("black_rook"));
+            figureList.Add(blackRook1);
+            var blackRook2 = new Rook(false, desk.board[7][0]);
+            blackRook2.Move(desk.board[7][0]);
+            blackRook2.LoadTexture(Content.Load<Texture2D>("black_rook"));
+            figureList.Add(blackRook2);
+
             var whiteKnight1 = new Knight(true, desk.board[0][6]);
             whiteKnight1.Move(desk.board[0][6]);
             whiteKnight1.LoadTexture(Content.Load<Texture2D>("white_knight"));
@@ -97,6 +125,15 @@ namespace ChessGL
             whiteKnight2.Move(desk.board[0][1]);
             whiteKnight2.LoadTexture(Content.Load<Texture2D>("white_knight"));
             figureList.Add(whiteKnight2);
+
+            var blackKnight1 = new Knight(false, desk.board[7][6]);
+            blackKnight1.Move(desk.board[7][6]);
+            blackKnight1.LoadTexture(Content.Load<Texture2D>("black_knight"));
+            figureList.Add(blackKnight1);
+            var blackKnight2 = new Knight(false, desk.board[7][1]);
+            blackKnight2.Move(desk.board[7][1]);
+            blackKnight2.LoadTexture(Content.Load<Texture2D>("black_knight"));
+            figureList.Add(blackKnight2);
 
 
             //Init pawns
@@ -206,8 +243,21 @@ namespace ChessGL
                 MouseClickEvent(this, e);
                 if (e.startingFigure == null)
                 {
+                    
                     mouse.firstClick = true;
+                    e.startingCell = null;
+                    e.endingCell = null;
+                    e.endingFigure = null;
+                    e.startingFigure = null;
 
+                }
+                else if (e.startingFigure.white != whitesMove) {
+                    e.startingFigure.Selected = false;
+                    mouse.firstClick = true;
+                    e.startingCell = null;
+                    e.endingCell = null;
+                    e.endingFigure = null;
+                    e.startingFigure = null;
                 }
                 else
                 {
@@ -230,15 +280,10 @@ namespace ChessGL
                     //etc
                     if (e.endingFigure == null)
                     {
-                        //if (e.startingFigure.PossibleMove(e.startingCell, e.endingCell))
                         if (currentPath.Contains(e.endingCell))
                         {
                             e.startingFigure.Move(e.startingCell, e.endingCell);
-                            //e.startingFigure.Position = e.endingCell.Position;
-                            //e.endingCell.Empty = false;
-                            //e.endingCell.figure = e.startingFigure;
-                            //e.startingCell.Empty = true;
-                            //e.startingCell.figure = null;
+                            whitesMove = !whitesMove;
 
                         }
                     }
@@ -250,22 +295,16 @@ namespace ChessGL
                             if (currentPath.Contains(e.endingCell))
                             {
                                 e.startingFigure.Move(e.startingCell, e.endingCell, e.endingFigure);
-                                //e.startingFigure.Position = e.endingCell.Position;
-                                //e.endingCell.Empty = false;
-                                //e.endingCell.figure = e.startingFigure;
-                                //e.endingFigure.Active = false;
-                                //e.startingCell.Empty = true;
-                                //e.startingCell.figure = null;
-                                
-
+                                whitesMove = !whitesMove;
                             }
                         }
                     }
-                    e.startingCell = null;
-                    e.endingCell = null;
-                    e.endingFigure = null;
-                    e.startingFigure = null;
+                    
                 }
+                e.startingCell = null;
+                e.endingCell = null;
+                e.endingFigure = null;
+                e.startingFigure = null;
             }
             else
             {
@@ -275,7 +314,7 @@ namespace ChessGL
             message += " X: " + newMouse.X.ToString() + " Y: " + newMouse.Y.ToString() + " ";
             message += entitySelected.ToString();
             message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
-
+            message += "WhitesMove = " + whitesMove.ToString();
             foreach (var figure in figureList)
             {
                 if (!figure.Active) { MouseClickEvent -= figure.MouseClickEvent; }
@@ -310,6 +349,7 @@ namespace ChessGL
                 }
             }
             _spriteBatch.DrawString(font, message, new Vector2(0, 0), Color.White);
+            _spriteBatch.DrawString(font, whitesMove.ToString(), new Vector2(800, 0), Color.White);
             _spriteBatch.End();
             // TODO: Add your drawing code here
 

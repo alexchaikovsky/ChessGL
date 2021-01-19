@@ -5,7 +5,7 @@ using ChessGL.Moves;
 
 namespace ChessGL.Figures
 {
-    class Knight :Figure
+    class Knight : Figure, IMoveKnight
     {
         public Knight(bool white, Cell defaultCell = null)
         {

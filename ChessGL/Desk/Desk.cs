@@ -68,6 +68,12 @@ namespace ChessGL.Moves
                 IMovePawn moveFigure = figure as IMovePawn;
                 path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
             }
+            if (figure is IMoveKnight)
+            {
+                figure.PrintDebug();
+                IMoveKnight moveFigure = figure as IMoveKnight;
+                path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
+            }
             //var figurePath = new List<Cell>();
             //foreach (var row in board)
             //{
