@@ -6,12 +6,16 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using ChessGL.Control.Buttons;
 
 namespace ChessGL
 {
     public class Game1 : Game
     {
         List<Cell> currentPath;
+
+        RotateBoardButton rotateBoardButton;
+
         Texture2D queenTexture;
         Texture2D deskTexture;
         MouseClickEventArgs e;
@@ -63,75 +67,83 @@ namespace ChessGL
             desk = new Desk(0.7f);
             figureList = new List<Figure>();
             e = new MouseClickEventArgs();
-            var blackQueen = new Queen(false, desk.board[7][3]);
-            blackQueen.Move(desk.board[7][3]);
+            rotateBoardButton = new RotateBoardButton(desk);
+            rotateBoardButton.LoadTexture(Content.Load<Texture2D>("rotate_board"));
+            rotateBoardButton.Position = desk.board[3][7].Position + new Point(150, 100);
+            MouseClickEvent += rotateBoardButton.MouseClickEvent;
+
+            var blackQueen = new Queen(false, desk.board[0][3]);
+            blackQueen.Move(desk.board[0][3]);
             blackQueen.LoadTexture(Content.Load<Texture2D>("black_queen"));
             figureList.Add(blackQueen);
 
-            var blackKing = new King(false, desk.board[7][4]);
-            blackKing.Move(desk.board[7][4]);
+            var blackKing = new King(false, desk.board[0][4]);
+            blackKing.Move(desk.board[0][4]);
             blackKing.LoadTexture(Content.Load<Texture2D>("black_king"));
+            blackKing.attackedTexture = Content.Load<Texture2D>("king_attacked");
             figureList.Add(blackKing);
 
-            whiteQueen = new Queen(true, desk.board[0][3]);
+            whiteQueen = new Queen(true, desk.board[7][3]);
             //whiteQueen.Position = new Point(100, 100);
             figureList.Add(whiteQueen);
 
-            whiteKing = new King(true, desk.board[0][4]);
+            whiteKing = new King(true, desk.board[7][4]);
             //whiteKing.Position = new Point(200, 100);
+            whiteKing.attackedTexture = Content.Load<Texture2D>("king_attacked");
+            whiteKing.Move(desk.board[7][4]);
             figureList.Add(whiteKing);
 
-            var whiteBishop1 = new Bishop(true, desk.board[0][5]);
-            whiteBishop1.Move(desk.board[0][5]);
+            var whiteBishop1 = new Bishop(true, desk.board[7][5]);
+            whiteBishop1.Move(desk.board[7][5]);
             whiteBishop1.LoadTexture(Content.Load<Texture2D>("white_bishop"));
             figureList.Add(whiteBishop1);
-            var whiteBishop2 = new Bishop(true, desk.board[0][2]);
-            whiteBishop2.Move(desk.board[0][2]);
+            var whiteBishop2 = new Bishop(true, desk.board[7][2]);
+            whiteBishop2.Move(desk.board[7][2]);
             whiteBishop2.LoadTexture(Content.Load<Texture2D>("white_bishop"));
             figureList.Add(whiteBishop2);
 
-            var blackBishop1 = new Bishop(false, desk.board[7][5]);
-            blackBishop1.Move(desk.board[7][5]);
+            var blackBishop1 = new Bishop(false, desk.board[0][5]);
+            blackBishop1.Move(desk.board[0][5]);
             blackBishop1.LoadTexture(Content.Load<Texture2D>("black_bishop"));
             figureList.Add(blackBishop1);
-            var blackBishop2 = new Bishop(false, desk.board[7][2]);
-            blackBishop2.Move(desk.board[7][2]);
+            var blackBishop2 = new Bishop(false, desk.board[0][2]);
+            blackBishop2.Move(desk.board[0][2]);
             blackBishop2.LoadTexture(Content.Load<Texture2D>("black_bishop"));
             figureList.Add(blackBishop2);
 
-            var whiteRook1 = new Rook(true, desk.board[0][7]);
-            whiteRook1.Move(desk.board[0][7]);
+            var whiteRook1 = new Rook(true, desk.board[7][7]);
+            whiteRook1.Move(desk.board[7][7]);
             whiteRook1.LoadTexture(Content.Load<Texture2D>("white_rook"));
             figureList.Add(whiteRook1);
-            var whiteRook2 = new Rook(true, desk.board[0][0]);
-            whiteRook2.Move(desk.board[0][0]);
+            var whiteRook2 = new Rook(true, desk.board[7][0]);
+            whiteRook2.Move(desk.board[7][0]);
             whiteRook2.LoadTexture(Content.Load<Texture2D>("white_rook"));
             figureList.Add(whiteRook2);
 
-            var blackRook1 = new Rook(false, desk.board[7][7]);
-            blackRook1.Move(desk.board[7][7]);
+            var blackRook1 = new Rook(false, desk.board[0][7]);
+            blackRook1.Move(desk.board[0][7]);
             blackRook1.LoadTexture(Content.Load<Texture2D>("black_rook"));
             figureList.Add(blackRook1);
-            var blackRook2 = new Rook(false, desk.board[7][0]);
-            blackRook2.Move(desk.board[7][0]);
+            var blackRook2 = new Rook(false, desk.board[0][0]);
+            blackRook2.Move(desk.board[0][0]);
             blackRook2.LoadTexture(Content.Load<Texture2D>("black_rook"));
             figureList.Add(blackRook2);
 
-            var whiteKnight1 = new Knight(true, desk.board[0][6]);
-            whiteKnight1.Move(desk.board[0][6]);
+            var whiteKnight1 = new Knight(true, desk.board[7][6]);
+            whiteKnight1.Move(desk.board[7][6]);
             whiteKnight1.LoadTexture(Content.Load<Texture2D>("white_knight"));
             figureList.Add(whiteKnight1);
-            var whiteKnight2 = new Knight(true, desk.board[0][1]);
-            whiteKnight2.Move(desk.board[0][1]);
+            var whiteKnight2 = new Knight(true, desk.board[7][1]);
+            whiteKnight2.Move(desk.board[7][1]);
             whiteKnight2.LoadTexture(Content.Load<Texture2D>("white_knight"));
             figureList.Add(whiteKnight2);
 
-            var blackKnight1 = new Knight(false, desk.board[7][6]);
-            blackKnight1.Move(desk.board[7][6]);
+            var blackKnight1 = new Knight(false, desk.board[0][6]);
+            blackKnight1.Move(desk.board[0][6]);
             blackKnight1.LoadTexture(Content.Load<Texture2D>("black_knight"));
             figureList.Add(blackKnight1);
-            var blackKnight2 = new Knight(false, desk.board[7][1]);
-            blackKnight2.Move(desk.board[7][1]);
+            var blackKnight2 = new Knight(false, desk.board[0][1]);
+            blackKnight2.Move(desk.board[0][1]);
             blackKnight2.LoadTexture(Content.Load<Texture2D>("black_knight"));
             figureList.Add(blackKnight2);
 
@@ -139,22 +151,22 @@ namespace ChessGL
             //Init pawns
             for (int i = 0; i < 8; i++)
             {
-                var blackPawn = new Pawn(false, desk.board[6][i]);
+                var blackPawn = new Pawn(false, desk.board[1][i]);
                 //blackPawn.white = ;
                 blackPawn.LoadTexture(Content.Load<Texture2D>(blackPawn.thisTexturePath));
                 //desk.board[6][i].figure = blackPawn;
                 //desk.board[6][i].Empty = false;
                 //blackPawn.Position = desk.board[6][i].Position;
-                blackPawn.Move(desk.board[6][i]);
+                blackPawn.Move(desk.board[1][i]);
                 Debug.WriteLine($"Pawn {i} Pos{blackPawn.Position.ToString()}");
                 figureList.Add(blackPawn);
 
             }
             for (int i = 0; i < 8; i++)
             {
-                var whitePawn = new Pawn(true, desk.board[1][i]);
+                var whitePawn = new Pawn(true, desk.board[6][i]);
                 whitePawn.LoadTexture(Content.Load<Texture2D>(whitePawn.thisTexturePath));
-                whitePawn.Move(desk.board[1][i]);
+                whitePawn.Move(desk.board[6][i]);
                 //Debug.WriteLine($"Pawn {i} Pos{whitePawn.Position.ToString()}");
                 figureList.Add(whitePawn);
 
@@ -177,18 +189,23 @@ namespace ChessGL
                     // }
                 }
             }
-            desk.board[0][3].figure = whiteQueen;
-            desk.board[0][3].Empty = false;
-            whiteQueen.Position = desk.board[0][3].Position;
-            desk.board[0][4].figure = whiteKing;
-            desk.board[0][4].Empty = false;
-            whiteKing.Position = desk.board[0][4].Position;
+            desk.board[7][3].figure = whiteQueen;
+            desk.board[7][3].Empty = false;
+            whiteQueen.Position = desk.board[7][3].Position;
+            desk.board[7][4].figure = whiteKing;
+            desk.board[7][4].Empty = false;
+            whiteKing.Position = desk.board[7][4].Position;
 
 
             //queenPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,_graphics.PreferredBackBufferHeight / 2);
             base.Initialize();
             base.Window.AllowUserResizing = true;
             //mouse = new MouseState();
+        }
+
+        private void Game1_MouseClickEvent(object sender, MouseClickEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void LoadContent()
@@ -224,11 +241,16 @@ namespace ChessGL
                         MouseClickEvent += figure.MouseClickEvent;
                         figure.Active = true;
                     }
+                    whitesMove = true;
                     figure.ToDefaultPosition();
                 }
             }
-
-            // TODO: Add your update logic here
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                desk.RotateBoard();
+                Debug.WriteLine("Desk rotated");
+            }
+                // TODO: Add your update logic here
             var newMouse = Mouse.GetState();
             //var kstate = Keyboard.GetState();
             //MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
@@ -299,6 +321,7 @@ namespace ChessGL
                             }
                         }
                     }
+                    Debug.WriteLine("WHITE KING ATTACKED = " + whiteKing.IsAttacked(desk).ToString());
                     
                 }
                 e.startingCell = null;
@@ -348,6 +371,7 @@ namespace ChessGL
                     figure.Draw(_spriteBatch);
                 }
             }
+            rotateBoardButton.Draw(_spriteBatch);
             _spriteBatch.DrawString(font, message, new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(font, whitesMove.ToString(), new Vector2(800, 0), Color.White);
             _spriteBatch.End();

@@ -1,14 +1,19 @@
 ﻿using ChessGL.Moves;
 using System;
+using System.Collections.Generic;
 
 namespace ChessGL.Figures
 {
-    class Pawn : Figure, IMovePawn
+    class Pawn : Figure
     {
+        
         public Pawn(bool white, Cell defaultCell)
         {
             this.white = white;
             this.defaultCell = defaultCell;
+            this.moveTypes = new List<IMove>();
+            moveTypes.Add(new MovePawn());
+
             if (white)
             {
                 thisTexturePath = "white_pawn";
@@ -27,5 +32,6 @@ namespace ChessGL.Figures
             return false;
 
         }
+        
     }
 }

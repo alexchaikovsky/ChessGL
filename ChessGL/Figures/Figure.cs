@@ -3,13 +3,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace ChessGL.Figures
 {
     public abstract class Figure : SelectableEntity
     {
         protected Cell defaultCell;
-        Texture2D texture;
+        protected Cell cell;
+        protected Texture2D texture;
+        protected List<IMove> moveTypes;
         Single resizeRate = 0.15f;
         protected Point defaultPosition;
         public bool white;
@@ -20,15 +23,26 @@ namespace ChessGL.Figures
         //    this.white = white;
         //    this.defaultCell = defaultCell;
         //}
+
+        protected void Init()
+        {
+            moveTypes = new List<IMove>();
+        }
         public bool CanEat(Figure figure)
         {
             if (figure == null)
             {
                 return false;
             }
+            //if (figure is King && figure.white ^ this.white)
+            //{
+            //    (figure as King).UnderAttack = true;
+            //    return false;
+
+            //}
             return figure.white ^ this.white;
         }
-        public Point GetDefaultPosition()
+        public virtual Point GetDefaultPosition()
         {
             return defaultCell.Position;
         }
@@ -39,7 +53,7 @@ namespace ChessGL.Figures
             this.Selectable = true;
             this.Active = true;
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             //spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(pixelSize / 2, pixelSize / 2), 0.15f, SpriteEffects.None, 1);
             spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(0, 0), 0.15f, SpriteEffects.None, 1);
@@ -52,7 +66,17 @@ namespace ChessGL.Figures
         }
         public virtual bool CheckMove(Cell start, Cell end)
         {
+            
             return true;
+        }
+        public virtual List<Cell> FindMove(Cell start, Desk desk, bool show = true)
+        {
+            var path = new List<Cell>();
+            foreach (var move in moveTypes)
+            {
+                path.AddRange(move.ShowPath(this, desk.board, start, show));
+            }
+            return path;
         }
 
         public virtual void ToDefaultPosition()
@@ -66,7 +90,7 @@ namespace ChessGL.Figures
         }
         public void PrintDebug()
         {
-            Debug.WriteLine("Inside " + MyName());
+            Debug.WriteLine("Inside " + MyName() + "Color = " + white.ToString());
         }
 
         public bool Move(Cell cell)
@@ -75,6 +99,7 @@ namespace ChessGL.Figures
             Position = cell.Position;
             cell.figure = this;
             cell.Empty = false;
+            this.cell = cell;
             return true;
         }
         public bool Move(Cell start, Cell end)
@@ -82,6 +107,7 @@ namespace ChessGL.Figures
             Move(end);
             start.Empty = true;
             start.figure = null;
+
             return true;
         }
         public bool Move(Cell start, Cell end, Figure prev)

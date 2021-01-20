@@ -5,31 +5,21 @@ using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
-    interface IMoveKnight : IMove
+    public class MoveKnight : Move, IMove
     {
-        public List<Cell> ShowPath(Figure figure, List<List<Cell>> board, Cell pathStartingCell)
+        public List<Cell> ShowPath(Figure figure, List<List<Cell>> board, Cell pathStartingCell, bool show)
         {
             var path = new List<Cell>();
             int col = pathStartingCell.col % 96 - 1, row = Math.Abs(pathStartingCell.row - 8);
             int tryCol = col, tryRow = row;
 
-            //for (int i = 1; i <= 2; i++)
-            //{
-            //    for (int j = 1; j <= 2; j++)
-            //    {
-            //        if (i != j)
-            //        {
-
-            //        }
-            //    }
-            //}
 
             tryCol += 1; tryRow += 2;
             if (InBounds(tryRow) && InBounds(tryCol))
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -40,7 +30,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -51,7 +41,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -61,7 +51,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -71,7 +61,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -81,7 +71,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -91,7 +81,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -101,7 +91,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = true;
+                    board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }

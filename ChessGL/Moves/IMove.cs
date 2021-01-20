@@ -1,14 +1,12 @@
-﻿using ChessGL.Figures;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
-    interface IMove
+    public interface IMove
     {
-        //void ShowPath();
-        public bool InBounds(int index)
-        {
-            return index >= 0 && index <= 7;
-
-        }
+        List<Cell> ShowPath(Figure figure, List<List<Cell>> board, Cell pathStartingCell, bool show = true);
     }
 }

@@ -6,9 +6,9 @@ using ChessGL.Figures;
 
 namespace ChessGL.Moves
 {
-    interface IMoveDiag : IMove
+    public class MoveDiag : IMove
     {
-        public List<Cell> ShowPath(Figure figure, List<List<Cell>> board, Cell pathStartingCell)
+        public List<Cell> ShowPath(Figure figure, List<List<Cell>> board, Cell pathStartingCell, bool show)
         {
             int col = pathStartingCell.col % 96 - 1, row = Math.Abs(pathStartingCell.row - 8);
             var path = new List<Cell>();
@@ -17,72 +17,72 @@ namespace ChessGL.Moves
             {
                 row++;
                 if (row == 8) { break; }
-                Debug.WriteLine("Checking" + board[row][i].ToString());
+                //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
                     if (board[row][i].figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
-                        board[row][i].Show = true;
+                        board[row][i].Show = show;
                     }
                     break;
                 }
                 path.Add(board[row][i]);
-                board[row][i].Show = true;
+                board[row][i].Show = show;
             }
             row = Math.Abs(pathStartingCell.row - 8);
             for (int i = col + 1; i < 8; i++) //moveleft
             {
                 row--;
                 if (row == -1) { break; }
-                Debug.WriteLine("Checking" + board[row][i].ToString());
+                //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
                     if (board[row][i].figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
-                        board[row][i].Show = true;
+                        board[row][i].Show = show;
                     }
                     break;
                 }
                 path.Add(board[row][i]);
-                board[row][i].Show = true;
+                board[row][i].Show = show;
             }
             row = Math.Abs(pathStartingCell.row - 8);
             for (int i = col - 1; i >= 0; i--) //moveleft
             {
                 row++;
                 if (row == 8) { break; }
-                Debug.WriteLine("Checking" + board[row][i].ToString());
+                //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
                     if (board[row][i].figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
-                        board[row][i].Show = true;
+                        board[row][i].Show = show;
                     }
                     break;
                 }
                 path.Add(board[row][i]);
-                board[row][i].Show = true;
+                board[row][i].Show = show;
             }
             row = Math.Abs(pathStartingCell.row - 8);
             for (int i = col - 1; i >= 0; i--) //moveleft
             {
                 row--;
                 if (row == -1) { break; }
-                Debug.WriteLine("Checking" + board[row][i].ToString());
+                //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
                     if (board[row][i].figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
-                        board[row][i].Show = true;
+                        board[row][i].Show = show;
                     }
                     break;
                 }
                 path.Add(board[row][i]);
-                board[row][i].Show = true;
+                board[row][i].Show = show;
             }
             return path;
         }
