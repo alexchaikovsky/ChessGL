@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System;
+using ChessGL.Board;
 
 namespace ChessGL.Moves
 {

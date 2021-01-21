@@ -3,8 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
+using ChessGL.Moves;
 
-namespace ChessGL.Moves
+namespace ChessGL.Board
 {
     public class Cell : SelectableEntity
     {
@@ -24,6 +25,17 @@ namespace ChessGL.Moves
             Empty = true;
             //Show = true;
 
+        }
+        public Cell GetCopy()
+        {
+            Cell cell = new Cell(Position, pixelSize);
+            cell.figure = figure;
+            cell.frameTexture = frameTexture;
+            cell.col = col;
+            cell.row = row;
+            cell.texture = texture;
+            cell.Empty = Empty;
+            return cell;
         }
         public bool Show { get; set; }
         public virtual void LoadTexture(Texture2D texture, Texture2D frameTexture)
@@ -70,14 +82,16 @@ namespace ChessGL.Moves
                     case 1:
                         if (PointInEntityArea(e.point))
                         {
-                            e.startingCell = this;
+                            //e.startingCell = this;
+                            e.positionChange.SetStartingCell(this);
                             Debug.WriteLine($"1st click CELL {this.MyName()}");
                         }
                         break;
                     case 2:
                         if (PointInEntityArea(e.point))
                         {
-                            e.endingCell = this;
+                            e.positionChange.SetEndingCell(this);
+                            //e.endingCell = this;
                             Debug.WriteLine($"2nd click CELL {this.MyName()}");
                         }
                         break;

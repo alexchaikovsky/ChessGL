@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using ChessGL.Figures;
-
+using ChessGL.Board;
 namespace ChessGL.Moves
 {
     public class MoveDiag : IMove

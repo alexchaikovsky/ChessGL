@@ -11,6 +11,7 @@ namespace ChessGL.Figures
     {
         public CheckKing(bool white, List<IMove> attackMoves)
         {
+            Init();
             this.white = white;
             moveTypes = attackMoves;
         }

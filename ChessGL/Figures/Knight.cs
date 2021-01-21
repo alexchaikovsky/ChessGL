@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ChessGL.Moves;
-
+using ChessGL.Board;
 namespace ChessGL.Figures
 {
     class Knight : Figure

@@ -4,19 +4,21 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using ChessGL.Board;
 
 namespace ChessGL.Figures
 {
     public abstract class Figure : SelectableEntity
     {
         protected Cell defaultCell;
-        protected Cell cell;
+        public Cell cell;
         protected Texture2D texture;
         protected List<IMove> moveTypes;
         Single resizeRate = 0.15f;
         protected Point defaultPosition;
         public bool white;
         public string thisTexturePath;
+        public Stack<Cell> history;
 
         //public Figure(bool white, Cell defaultCell)
         //{
@@ -27,7 +29,9 @@ namespace ChessGL.Figures
         protected void Init()
         {
             moveTypes = new List<IMove>();
+            history = new Stack<Cell>();
         }
+        
         public bool CanEat(Figure figure)
         {
             if (figure == null)
@@ -84,9 +88,25 @@ namespace ChessGL.Figures
             //Position = defaultPosition;
             Move(defaultCell);
         }
+        public void Reverse()
+        {
+            ToDefaultPosition();
+            if (history.Count != 0)
+            {
+                Cell prevCell = history.Pop();
+                Move(prevCell);
+            }
+            return;
+            
+        }
         public override string MyName()
         {
-            return $"Figure {this.ToString()} Position: {Position.ToString()}";
+            string historyString = "";
+            foreach(var cell in history)
+            {
+                historyString += cell.MyName();
+            }
+            return $"Figure {this.ToString()} Position: {Position.ToString()} history" + historyString;
         }
         public void PrintDebug()
         {
@@ -113,8 +133,12 @@ namespace ChessGL.Figures
         public bool Move(Cell start, Cell end, Figure prev)
         {
             Move(start, end);
-            prev.Active = false;
-            Debug.WriteLine(prev.MyName() + "no more active");
+            if (prev != null)
+            {
+                prev.Active = false;
+                Debug.WriteLine(prev.MyName() + "no more active");
+            }
+            
             return true;
         }
         public void CellClickEvent(object sender, CellEventArgs e)
@@ -180,8 +204,8 @@ namespace ChessGL.Figures
                         //Debug.WriteLine($"figure case 1");
                         if (PointInEntityArea(e.point) && !Selected)
                         {
-                            e.startingFigure = this as Figure;
-
+                            //e.positionChange.GetStartingFigure() ostartingFigure = this as Figure;
+                            e.positionChange.SetStartingFigure(this);
                             Selected = true;
                             Debug.WriteLine($"SELECTED {this.MyName()}");
                             CallAnswerEvent();
@@ -193,7 +217,8 @@ namespace ChessGL.Figures
                         {
                             if (this is Figure)
                             {
-                                e.startingFigure = this as Figure;
+                                //e.startingFigure = this as Figure;
+                                e.positionChange.SetStartingFigure(this);
                             }
                             //Position = e.point;
                             Selected = false;
@@ -204,7 +229,8 @@ namespace ChessGL.Figures
                             if (PointInEntityArea(e.point))
                             {
                                 //Debug.WriteLine($"2ND CLICK {this.MyName()}");
-                                e.endingFigure = this;
+                                e.positionChange.SetEndingFigure(this);
+                                //e.endingFigure = this;
                             }
                         }
                         break;

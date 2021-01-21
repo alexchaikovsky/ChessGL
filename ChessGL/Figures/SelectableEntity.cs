@@ -1,6 +1,7 @@
 ﻿using ChessGL.Figures;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using ChessGL.Board;
 
 namespace ChessGL.Moves
 {

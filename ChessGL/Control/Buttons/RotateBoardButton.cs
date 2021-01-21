@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ChessGL.Moves;
+using ChessGL.Board;
+
 namespace ChessGL.Control.Buttons
 {
     class RotateBoardButton : InterfaceButton

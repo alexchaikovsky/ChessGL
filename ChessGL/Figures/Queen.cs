@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-
+using ChessGL.Board;
 namespace ChessGL.Figures
 {
     public class Queen : Figure

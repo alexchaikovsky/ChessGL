@@ -1,7 +1,7 @@
 ﻿using ChessGL.Moves;
 using System;
 using System.Collections.Generic;
-
+using ChessGL.Board;
 namespace ChessGL.Figures
 {
     class Pawn : Figure
@@ -11,7 +11,8 @@ namespace ChessGL.Figures
         {
             this.white = white;
             this.defaultCell = defaultCell;
-            this.moveTypes = new List<IMove>();
+            //this.moveTypes = new List<IMove>();
+            Init();
             moveTypes.Add(new MovePawn());
 
             if (white)

@@ -3,19 +3,25 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using ChessGL.Figures;
 
-namespace ChessGL.Moves
+namespace ChessGL.Board
 {
     public class Desk
     {
         public List<List<Cell>> board;
         public List<List<Cell>> originalPositions;
+        King whiteKing;
+        King blackKing;
         int size;
         int whitePerspective; // 1 if player plays white else -1
         bool deskRotated;
         public Desk(Single resizeOption = 1, int whitePerspective = -1)
         {
             this.whitePerspective = whitePerspective;
+
+            
+            
             board = new List<List<Cell>>();
 
             int firstCellX = 32;
@@ -44,53 +50,75 @@ namespace ChessGL.Moves
             }
 
         }
+        public void AddKings(King whiteKing, King blackKing)
+        {
+            this.whiteKing = whiteKing;
+            this.blackKing = blackKing;
+        }
         public void UpdateTexturesSize(Single resizeOption)
         {
             size = (int)(162 * resizeOption);
         }
+        bool KingsAttacked()
+        {
+            return whiteKing.IsAttacked(this) || blackKing.IsAttacked(this);
+        }
+        public void PlaceCell(Cell cell)
+        {
+            int col = cell.col % 96 - 1, row = Math.Abs(cell.row - 8);
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (i == row && j == col)
+                    {
+                        if (board[i][j].figure != null)
+                        {
+                            cell.figure = board[i][j].figure;
+                            cell.figure.cell = cell;
+                            //board[i][j].figure.cell = cell;
+                        }
+                        board[i][j] = cell;
+                    }
+                }
+            }
+
+        } 
         public List<Cell> ShowPath(Cell pathStartingCell, Figure figure)
         {
-            return figure.FindMove(pathStartingCell, this);
-            //Debug.WriteLine($"{board.Count}, {board[0].Count}\n{board[1][2].ToString()}");
-            //var path = new List<Cell>();
-            //if (figure is IMoveStraight)
+            var possibleMoves = figure.FindMove(pathStartingCell, this);
+            //List<Cell> kingSafeMoves = new List<Cell>();
+            //for (int i = 0; i < possibleMoves.Count; i++)
             //{
-            //    figure.PrintDebug();
-            //    IMoveStraight moveFigure = figure as IMoveStraight;
-            //    path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
-            //}
-            //if (figure is IMoveDiag)
-            //{
-            //    figure.PrintDebug();
-            //    IMoveDiag moveFigure = figure as IMoveDiag;
-            //    path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
-            //}
-            
-            //if (figure is IMoveKnight)
-            //{
-            //    figure.PrintDebug();
-            //    IMoveKnight moveFigure = figure as IMoveKnight;
-            //    path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
-            //}
-            //if (figure is IMoveKing)
-            //{
-            //    figure.PrintDebug();
-            //    IMoveKing moveFigure = figure as IMoveKing;
-            //    path.AddRange(moveFigure.ShowPath(figure, board, pathStartingCell));
-            //}
-            //var figurePath = new List<Cell>();
-            //foreach (var row in board)
-            //{
-            //    foreach (var cell in row)
-            //    {
-            //        if (figure.PossibleMove(pathStartingCell, cell))
+
+            //    Cell testCell = possibleMoves[i].GetCopy();
+            //    Cell savedCell = possibleMoves[i].GetCopy();
+            //    Debug.WriteLine(testCell.MyName());
+            //    PlaceCell(testCell);
+            //    //normalCell = tryCell;
+            //    figure.Move(figure.cell, testCell, testCell.figure);
+
+
+            //        if (figure.white)
             //        {
-            //            //figurePath.Add(cell);
-            //            cell.Show = true;
+            //            if (!whiteKing.IsAttacked(this))
+            //            {
+            //                kingSafeMoves.Add(savedCell);
+            //            }
+
             //        }
+            //        else
+            //        {
+            //            if (!blackKing.IsAttacked(this))
+            //            {
+            //                kingSafeMoves.Add(savedCell);
+            //            }
+
             //    }
+            //    PlaceCell(savedCell);
             //}
-            //return path;
+            //return kingSafeMoves;
+            return possibleMoves;
         }
         public void ShutPath()
         {

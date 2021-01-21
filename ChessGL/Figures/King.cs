@@ -2,10 +2,11 @@
 using ChessGL.Moves;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using ChessGL.Board;
 
 namespace ChessGL.Figures
 {
-    class King : Figure
+    public class King : Figure
     {
         public Texture2D attackedTexture;
         List <IMove> attackMoves;
