@@ -48,7 +48,7 @@ namespace ChessGL.Moves
         }
         public virtual void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
-            if (sender is Game)
+            if (sender is Match)
             {
                 Debug.WriteLine("clickonentity");
                 if (PointInEntityArea(e.point))

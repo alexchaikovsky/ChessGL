@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 using ChessGL.Control;
 using ChessGL.Board;
@@ -17,7 +18,7 @@ namespace ChessGL
         //List<Cell> currentPath;
 
         PositionChange currentChange;
-
+        List<Cell> currentPath;
         RotateBoardButton rotateBoardButton;
         PreviousPositionButton previousPositionButton;
 
@@ -49,11 +50,18 @@ namespace ChessGL
 
         private SpriteBatch _spriteBatch;
 
-        public Match(Game game)
+        public Match(Game game, SpriteBatch spriteBatch)
         {
+            this._spriteBatch = spriteBatch;
             this.game = game;
+            mouse = new TwoStageMouse();
+            desk = new Desk(0.7f);
+            figureList = new List<Figure>();
+            e = new MouseClickEventArgs();
+            currentChange = new PositionChange();
+            e.positionChange = currentChange;
         }
-        void CreateFigures()
+        public void CreateFigures()
         {
             
             var blackQueen = new Queen(false, desk.board[0][3]);
@@ -69,10 +77,14 @@ namespace ChessGL
             
             whiteQueen = new Queen(true, desk.board[7][3]);
             //whiteQueen.Position = new Point(100, 100);
+            whiteQueen.Move(desk.board[7][3]);
+            whiteQueen.LoadTexture(game.Content.Load<Texture2D>("white_queen"));
+            
             figureList.Add(whiteQueen);
 
             whiteKing = new King(true, desk.board[7][4]);
             //whiteKing.Position = new Point(200, 100);
+            whiteKing.LoadTexture(game.Content.Load<Texture2D>("white_king"));
             whiteKing.attackedTexture = game.Content.Load<Texture2D>("king_attacked");
             whiteKing.Move(desk.board[7][4]);
             figureList.Add(whiteKing);
@@ -179,8 +191,19 @@ namespace ChessGL
             whiteQueen.Position = desk.board[7][3].Position;
             //desk.board[7][4].figure = whiteKing;
             //desk.board[7][4].Empty = false;
+
+
+            deskTexture = game.Content.Load<Texture2D>("desk");
+            //whiteQueenTexture = Content.Load<Texture2D>("white_queen");
+            //whiteQueen.LoadTexture(game.Content.Load<Texture2D>("white_queen"));
+            //whiteKing.LoadTexture(Content.Load<Texture2D>("white_king"));
+            //blackPawn.LoadTexture(Content.Load<Texture2D>("black_pawn"));
+
+            font = game.Content.Load<SpriteFont>("basicFont");
+
         }
-        void LoadButtons()
+        
+        public void LoadButtons()
         {
             rotateBoardButton = new RotateBoardButton(desk);
             rotateBoardButton.LoadTexture(game.Content.Load<Texture2D>("rotate_board"));
@@ -195,7 +218,130 @@ namespace ChessGL
 
         public void Update()
         {
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //{
+            //    //_graphics.ToggleFullScreen();
+            //    _graphics.PreferredBackBufferWidth = 1000;
+            //    _graphics.PreferredBackBufferHeight = 1000;
+            //}
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                desk.ToDefaultSet();
+                foreach (var figure in figureList)
+                {
+                    if (!figure.Active)
+                    {
+                        MouseClickEvent += figure.MouseClickEvent;
+                        figure.Active = true;
+                    }
+                    //whitesMove = true;
+                    figure.ToDefaultPosition();
+                }
+            }
 
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.B))
+            {
+                desk.ToDefaultSet();
+                foreach (var figure in figureList)
+                {
+                    figure.Reverse();
+                }
+            }
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                desk.RotateBoard();
+                Debug.WriteLine("Desk rotated");
+            }
+            // TODO: Add your update logic here
+            var newMouse = Mouse.GetState();
+            //var kstate = Keyboard.GetState();
+            //MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
+
+            int mouseAnswer = mouse.CheckClick(newMouse);
+            e.point = newMouse.Position;
+            e.mouse = newMouse;
+            if (mouseAnswer == 1)
+            {
+                message = "1st click";
+                e.clickNumber = 1;
+                MouseClickEvent(this, e);
+                //if (e.startingFigure == null)
+                if (!e.positionChange.FigureSelected())
+                {
+
+                    mouse.firstClick = true;
+                    e.positionChange.SetNull();
+
+                }
+                else if (e.positionChange.SelectedFigureIsWhite() != desk.WhitesTurn)
+                {
+                    e.positionChange.UndoSelection();
+                    mouse.firstClick = true;
+                    e.positionChange.SetNull();
+                }
+                else
+                {
+                    //currentPath =  desk.ShowPath(e.startingCell, e.startingFigure);
+                    var watch = System.Diagnostics.Stopwatch.StartNew();
+                    currentPath = desk.ShowPath(e.positionChange.GetStartingCell(), e.positionChange.GetStartingFigure());
+                    watch.Stop();
+                    var elapsedMs = watch.ElapsedMilliseconds;
+                    Debug.WriteLine($"ElapsedMS::{elapsedMs}");
+                    if (currentPath.Count == 0)
+                    {
+                        mouse.firstClick = true;
+                        e.positionChange.SetNull();
+                    }
+                }
+
+            }
+            else if (mouseAnswer == 2)
+            {
+                desk.ShutPath();
+
+                e.clickNumber = 2;
+                MouseClickEvent(this, e);
+                message = "2nd click";
+                //Debug.WriteLine($"START {e.startingCell?.ToString()} {e.startingFigure?.ToString()}"
+                //    + $"\nEND {e.endingCell?.ToString()} {e.endingFigure?.ToString()}");
+                //if (e.startingFigure != null && e.endingCell != null)
+                if (e.positionChange.FigureSelected())
+                {
+                    if (currentPath.Contains(e.positionChange.GetEndingCell()))
+                    {
+                        e.positionChange.MakeChange();
+                        //whitesMove = !whitesMove;
+                        desk.WhitesTurn = !desk.WhitesTurn;
+                        Debug.WriteLine("WHITE KING ATTACKED = " + whiteKing.IsAttacked(desk).ToString());
+                        Debug.WriteLine("BLACK KING ATTACKED = " + blackKing.IsAttacked(desk).ToString());
+                        desk.AddPositionChange(e.positionChange);
+                        e.positionChange = new PositionChange();
+                    }
+
+                }
+
+                e.positionChange.SetNull();
+                //e.startingCell = null;
+                //e.endingCell = null;
+                //e.endingFigure = null;
+                //e.startingFigure = null;
+            }
+            else
+            {
+                message = "release";
+            }
+
+            message += " X: " + newMouse.X.ToString() + " Y: " + newMouse.Y.ToString() + " ";
+            //message += entitySelected.ToString();
+            message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
+            message += "WhitesMove = " + desk.WhitesTurn.ToString();
+            foreach (var figure in figureList)
+            {
+                if (!figure.Active) { if (figure.Subcribed) MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
+                else { if (!figure.Subcribed) MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
+            }
         }
         protected virtual void OnMouseClick(Match match, MouseClickEventArgs e)
         {
@@ -203,9 +349,30 @@ namespace ChessGL
         }
         public event EventHandler<MouseClickEventArgs> MouseClickEvent;
 
-        void Draw()
+        public void Draw()
         {
-
+            _spriteBatch.Draw(deskTexture, new Vector2(0, 30), null, Color.White, 0, new Vector2(0, 0), 0.7f, SpriteEffects.None, 0);
+            foreach (var row in desk.board)
+            {
+                foreach (var cell in row)
+                {
+                    if (cell.Show)
+                    {
+                        cell.Draw(_spriteBatch);
+                    }
+                }
+            }
+            foreach (var figure in figureList)
+            {
+                if (figure.Active)
+                {
+                    figure.Draw(_spriteBatch);
+                }
+            }
+            rotateBoardButton.Draw(_spriteBatch);
+            previousPositionButton.Draw(_spriteBatch);
+            _spriteBatch.DrawString(font, message, new Vector2(0, 0), Color.White);
+            //_spriteBatch.DrawString(font, whitesMove.ToString(), new Vector2(800, 0), Color.White);
         }
 
     }
