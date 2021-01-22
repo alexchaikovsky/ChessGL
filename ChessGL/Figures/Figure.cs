@@ -25,7 +25,7 @@ namespace ChessGL.Figures
         //    this.white = white;
         //    this.defaultCell = defaultCell;
         //}
-
+        public bool Subcribed { get; set; }
         protected void Init()
         {
             moveTypes = new List<IMove>();
@@ -106,7 +106,7 @@ namespace ChessGL.Figures
             {
                 historyString += cell.MyName();
             }
-            return $"Figure {this.ToString()} Position: {Position.ToString()} history" + historyString;
+            return $"Figure {this.ToString()} white={white}";
         }
         public void PrintDebug()
         {

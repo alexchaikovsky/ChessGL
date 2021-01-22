@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessGL", "ChessGL\ChessGL.csproj", "{1A7C0710-73D5-4456-A3CF-76A09FF1224F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessGL", "ChessGL\ChessGL.csproj", "{1A7C0710-73D5-4456-A3CF-76A09FF1224F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "..\MadChess-Source-2-2\MadChess\Engine\Engine.csproj", "{77DB7778-4817-48ED-85EF-D829D27893E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1A7C0710-73D5-4456-A3CF-76A09FF1224F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A7C0710-73D5-4456-A3CF-76A09FF1224F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A7C0710-73D5-4456-A3CF-76A09FF1224F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77DB7778-4817-48ED-85EF-D829D27893E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DB7778-4817-48ED-85EF-D829D27893E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DB7778-4817-48ED-85EF-D829D27893E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DB7778-4817-48ED-85EF-D829D27893E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

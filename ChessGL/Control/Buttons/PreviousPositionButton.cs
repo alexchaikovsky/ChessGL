@@ -16,13 +16,14 @@ namespace ChessGL.Control.Buttons
         }
         public override void Action()
         {
-            foreach (var row in desk.board)
-            {
-                foreach(var cell in row)
-                {
-                    cell.figure?.ToDefaultPosition();
-                }
-            }
+            desk.MoveBack();
+            //foreach (var row in desk.board)
+            //{
+            //    foreach(var cell in row)
+            //    {
+            //        cell.figure?.ToDefaultPosition();
+            //    }
+            //}
         }
     }
 }
