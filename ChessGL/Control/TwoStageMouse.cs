@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 
-namespace ChessGL.Moves
+namespace ChessGL.Control;
 {
     class TwoStageMouse
     {

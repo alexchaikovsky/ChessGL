@@ -29,6 +29,14 @@ namespace ChessGL.Moves
                 }
             }
             
+            //if (pathStartingCell.Position == figure.GetDefaultPosition())
+            //{
+            //    for (int i = 5; i < 7; i++)
+            //    {
+            //        if (board[row])
+            //    }
+            //}
+
             return path;
         }
     }

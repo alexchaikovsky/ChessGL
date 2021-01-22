@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using ChessGL.Moves;
 using ChessGL.Figures;
+using System.Diagnostics;
+
 namespace ChessGL.Board
 {
     public class PositionChange
@@ -82,11 +84,19 @@ namespace ChessGL.Board
         }
         public void ReverseChange()
         {
+            startingFigure.Move(endingCell, startingCell);
             if (endingFigure!= null)
             {
                 endingFigure.Active = true;
+                endingFigure.cell = endingCell;
+                endingFigure.Move(endingCell);
             }
-            startingFigure.Move(startingCell, endingCell);
+            //endingCell.figure = endingFigure;
+            Debug.WriteLine("STARTF" + startingFigure.MyName()
+                + "STARTCELL" + startingCell.MyName()
+                + "ENDF" + endingFigure?.MyName()
+                + "EDNCELL" + endingCell.MyName());
+            
         }
         public Figure GetStartingFigure()
         {
