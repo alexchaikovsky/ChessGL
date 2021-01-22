@@ -70,7 +70,7 @@ namespace ChessGL.Board
 
         public override void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
-            if (sender is Game)
+            if (sender is Match)
             {
                 //if (PointInEntityArea(e.point)) {
                 //    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");

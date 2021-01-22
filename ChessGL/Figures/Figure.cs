@@ -196,7 +196,7 @@ namespace ChessGL.Figures
         public bool Active { get; set; }
         public override void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
-            if (sender is Game)
+            if (sender is Match)
             {
                 switch (e.clickNumber)
                 {
