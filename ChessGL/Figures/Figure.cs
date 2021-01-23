@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using ChessGL.Board;
+using ChessGL.Player;
 
 namespace ChessGL.Figures
 {
@@ -196,7 +197,7 @@ namespace ChessGL.Figures
         public bool Active { get; set; }
         public override void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
-            if (sender is Match)
+            if (sender is PcPlayer)
             {
                 switch (e.clickNumber)
                 {

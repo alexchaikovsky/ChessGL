@@ -34,6 +34,10 @@ namespace ChessGL.Board
             this.startingFigure = null;
             this.endingFigure = null;
         }
+        public bool IsSelectionCorrect()
+        {
+            return startingCell.figure == startingFigure && startingFigure.cell == startingCell;
+        }
         public void SetStartingFigure(Figure figure)
         {
             startingFigure = figure;

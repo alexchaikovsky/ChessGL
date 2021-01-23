@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
 using ChessGL.Moves;
+using ChessGL.Player;
 
 namespace ChessGL.Board
 {
@@ -70,7 +71,7 @@ namespace ChessGL.Board
 
         public override void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
-            if (sender is Match)
+            if (sender is PcPlayer)
             {
                 //if (PointInEntityArea(e.point)) {
                 //    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");
