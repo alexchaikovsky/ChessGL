@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using ChessGL.Board;
+using ChessGL.Player;
 
 namespace ChessGL.Moves
 {
@@ -48,7 +49,7 @@ namespace ChessGL.Moves
         }
         public virtual void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
-            if (sender is Match)
+            if (sender is PcPlayer)
             {
                 Debug.WriteLine("clickonentity");
                 if (PointInEntityArea(e.point))

@@ -13,7 +13,7 @@ namespace ChessGL.Board
     {
         public List<List<Cell>> board;
         public List<List<Cell>> originalPositions;
-
+        public List<Cell> currentPath;
         Stack <PositionChange> history;
         Texture2D deskTexture;
         King whiteKing;
@@ -25,6 +25,7 @@ namespace ChessGL.Board
         public bool WhitesTurn { get; set; }
         public Desk(Single resizeOption = 1, int whitePerspective = -1)
         {
+            currentPath = new List<Cell>();
             this.whitePerspective = whitePerspective;
             history = new Stack<PositionChange>();
 

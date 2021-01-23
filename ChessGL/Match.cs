@@ -10,6 +10,7 @@ using ChessGL.Control;
 using ChessGL.Board;
 using ChessGL.Control.Buttons;
 using ChessGL.Figures;
+using ChessGL.Player;
 
 namespace ChessGL
 {
@@ -47,7 +48,7 @@ namespace ChessGL
         List<Figure> figureList;
         Desk desk;
         //MouseState mouse;
-
+        PcPlayer pcPlayer;
         private SpriteBatch _spriteBatch;
 
         public Match(Game game, SpriteBatch spriteBatch)
@@ -60,6 +61,7 @@ namespace ChessGL
             e = new MouseClickEventArgs();
             currentChange = new PositionChange();
             e.positionChange = currentChange;
+            pcPlayer = new PcPlayer(desk);
         }
         public void CreateFigures()
         {
@@ -170,7 +172,8 @@ namespace ChessGL
             foreach (var figure in figureList)
             {
                 //figure.ToDefaultPosition();
-                this.MouseClickEvent += figure.MouseClickEvent;
+                pcPlayer.MouseClickEvent += figure.MouseClickEvent;
+                //this.MouseClickEvent += figure.MouseClickEvent;
                 figure.Subcribed = true;
 
             }
@@ -179,7 +182,8 @@ namespace ChessGL
                 foreach (var cell in row)
                 {
                     // figure.ToDefaultPosition();
-                    this.MouseClickEvent += cell.MouseClickEvent;
+                    pcPlayer.MouseClickEvent += cell.MouseClickEvent;
+                    //this.MouseClickEvent += cell.MouseClickEvent;
                     cell.LoadTexture(game.Content.Load<Texture2D>("green_circle"), game.Content.Load<Texture2D>("frame"));
                     //foreach (var figure in figureList) {
                     //    cell.CellClickEvent += figure.CellClickEvent;
@@ -208,12 +212,12 @@ namespace ChessGL
             rotateBoardButton = new RotateBoardButton(desk);
             rotateBoardButton.LoadTexture(game.Content.Load<Texture2D>("rotate_board"));
             rotateBoardButton.Position = desk.board[3][7].Position + new Point(150, 100);
-            MouseClickEvent += rotateBoardButton.MouseClickEvent;
+            pcPlayer.MouseClickEvent += rotateBoardButton.MouseClickEvent;
 
             previousPositionButton = new PreviousPositionButton(desk);
             previousPositionButton.LoadTexture(game.Content.Load<Texture2D>("back_arrow"));
             previousPositionButton.Position = desk.board[0][7].Position + new Point(150, 100);
-            MouseClickEvent += previousPositionButton.MouseClickEvent;
+            pcPlayer.MouseClickEvent += previousPositionButton.MouseClickEvent;
         }
 
         public void Update()
@@ -231,7 +235,7 @@ namespace ChessGL
                 {
                     if (!figure.Active)
                     {
-                        MouseClickEvent += figure.MouseClickEvent;
+                        pcPlayer.MouseClickEvent += figure.MouseClickEvent;
                         figure.Active = true;
                     }
                     //whitesMove = true;
@@ -254,100 +258,17 @@ namespace ChessGL
                 desk.RotateBoard();
                 Debug.WriteLine("Desk rotated");
             }
-            // TODO: Add your update logic here
-            var newMouse = Mouse.GetState();
-            //var kstate = Keyboard.GetState();
-            //MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
 
-            int mouseAnswer = mouse.CheckClick(newMouse);
-            e.point = newMouse.Position;
-            e.mouse = newMouse;
-            if (mouseAnswer == 1)
-            {
-                message = "1st click";
-                e.clickNumber = 1;
-                MouseClickEvent(this, e);
-                //if (e.startingFigure == null)
-                if (!e.positionChange.FigureSelected())
-                {
-
-                    mouse.firstClick = true;
-                    e.positionChange.SetNull();
-
-                }
-                else if (e.positionChange.SelectedFigureIsWhite() != desk.WhitesTurn)
-                {
-                    e.positionChange.UndoSelection();
-                    mouse.firstClick = true;
-                    e.positionChange.SetNull();
-                }
-                else
-                {
-                    //currentPath =  desk.ShowPath(e.startingCell, e.startingFigure);
-                    var watch = System.Diagnostics.Stopwatch.StartNew();
-                    currentPath = desk.ShowPath(e.positionChange.GetStartingCell(), e.positionChange.GetStartingFigure());
-                    watch.Stop();
-                    var elapsedMs = watch.ElapsedMilliseconds;
-                    Debug.WriteLine($"ElapsedMS::{elapsedMs}");
-                    if (currentPath.Count == 0)
-                    {
-                        mouse.firstClick = true;
-                        e.positionChange.SetNull();
-                    }
-                }
-
-            }
-            else if (mouseAnswer == 2)
-            {
-                desk.ShutPath();
-
-                e.clickNumber = 2;
-                MouseClickEvent(this, e);
-                message = "2nd click";
-                //Debug.WriteLine($"START {e.startingCell?.ToString()} {e.startingFigure?.ToString()}"
-                //    + $"\nEND {e.endingCell?.ToString()} {e.endingFigure?.ToString()}");
-                //if (e.startingFigure != null && e.endingCell != null)
-                if (e.positionChange.FigureSelected())
-                {
-                    if (currentPath.Contains(e.positionChange.GetEndingCell()))
-                    {
-                        e.positionChange.MakeChange();
-                        //whitesMove = !whitesMove;
-                        desk.WhitesTurn = !desk.WhitesTurn;
-                        Debug.WriteLine("WHITE KING ATTACKED = " + whiteKing.IsAttacked(desk).ToString());
-                        Debug.WriteLine("BLACK KING ATTACKED = " + blackKing.IsAttacked(desk).ToString());
-                        desk.AddPositionChange(e.positionChange);
-                        e.positionChange = new PositionChange();
-                    }
-
-                }
-
-                e.positionChange.SetNull();
-                //e.startingCell = null;
-                //e.endingCell = null;
-                //e.endingFigure = null;
-                //e.startingFigure = null;
-            }
-            else
-            {
-                message = "release";
-            }
-
-            message += " X: " + newMouse.X.ToString() + " Y: " + newMouse.Y.ToString() + " ";
-            //message += entitySelected.ToString();
+            pcPlayer.Update();
+            message = "";
             message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
             message += "WhitesMove = " + desk.WhitesTurn.ToString();
             foreach (var figure in figureList)
             {
-                if (!figure.Active) { if (figure.Subcribed) MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
-                else { if (!figure.Subcribed) MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
+                if (!figure.Active) { if (figure.Subcribed) pcPlayer.MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
+                else { if (!figure.Subcribed) pcPlayer.MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
             }
         }
-        protected virtual void OnMouseClick(Match match, MouseClickEventArgs e)
-        {
-            MouseClickEvent?.Invoke(this, e);
-        }
-        public event EventHandler<MouseClickEventArgs> MouseClickEvent;
 
         public void Draw()
         {
