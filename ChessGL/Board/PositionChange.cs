@@ -38,7 +38,7 @@ namespace ChessGL.Board
         {
             // TODO: проверить выбор фигур (тест: при атаке черной пешкой короля при выборе ладьи а затем переключении на короля и при съедении пешки ладья перескакивает на место короля) 
             return (startingCell.figure == startingFigure && startingFigure.cell == startingCell) 
-                || 
+                && 
                 (startingCell != endingCell && startingFigure != endingFigure);
         }
         public void SetStartingFigure(Figure figure)
@@ -75,14 +75,20 @@ namespace ChessGL.Board
             {
                 return endingFigure.white ^ startingFigure.white;
             }
+            else if (endingCell.figure != null)
+            {
+                return endingCell.figure.white ^ startingFigure.white;
+            }
             return false;
             //return FigureSelected() && endingFigure != null;
         }
         public void MakeChange()
         {
+            Debug.WriteLine($"start {startingCell}{startingFigure.MyName()}\nend {endingCell} {endingCell.figure?.MyName()}");
             if (FigureAttacking())
             {
-                startingFigure.Move(startingCell, endingCell, endingFigure);
+                //startingFigure.Move(startingCell, endingCell, endingFigure);
+                startingFigure.Move(startingCell, endingCell, endingCell.figure);
             }
             else
             {

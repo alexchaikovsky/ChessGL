@@ -18,8 +18,8 @@ namespace ChessGL
     public class Match
     {
         PositionChange currentChange;
-        RotateBoardButton rotateBoardButton;
-        PreviousPositionButton previousPositionButton;
+        public RotateBoardButton rotateBoardButton;
+        public PreviousPositionButton previousPositionButton;
 
         Texture2D deskTexture;
         MouseClickEventArgs e;
@@ -35,11 +35,14 @@ namespace ChessGL
         string message = "Init";
         List<Figure> figureList;
         Desk desk;
-        PcPlayer pcPlayer;
-        EnginePlayer enginePlayer;
-        private SpriteBatch _spriteBatch;
+        //PcPlayer pcPlayer;
+        //EnginePlayer enginePlayer;
+        IPlayer whitesPlayer;
+        IPlayer blacksPlayer;
 
-        public Match(Game game, SpriteBatch spriteBatch)
+        private SpriteBatch _spriteBatch;
+        public bool MatchEnded { get; set; }
+        public Match(Game game, SpriteBatch spriteBatch, IPlayer whitesPlayer, IPlayer blacksPlayer)
         {
             this._spriteBatch = spriteBatch;
             this.game = game;
@@ -49,8 +52,13 @@ namespace ChessGL
             e = new MouseClickEventArgs();
             currentChange = new PositionChange();
             e.positionChange = currentChange;
-            pcPlayer = new PcPlayer(desk);
-            enginePlayer = new EnginePlayer(desk);
+            //pcPlayer = new PcPlayer(desk);
+            //enginePlayer = new EnginePlayer(desk);
+            this.whitesPlayer = whitesPlayer;
+            this.blacksPlayer = blacksPlayer;
+            this.whitesPlayer.AddDesk(desk);
+            this.blacksPlayer.AddDesk(desk);
+            MatchEnded = false;
         }
         public void CreateFigures()
         {
@@ -161,9 +169,12 @@ namespace ChessGL
             foreach (var figure in figureList)
             {
                 //figure.ToDefaultPosition();
-                pcPlayer.MouseClickEvent += figure.MouseClickEvent;
+                //pcPlayer.MouseClickEvent += figure.MouseClickEvent;
+                if (figure.white) whitesPlayer.CheckFigureSubscription(figure);
+                else blacksPlayer.CheckFigureSubscription(figure);
                 //this.MouseClickEvent += figure.MouseClickEvent;
                 figure.Subcribed = true;
+                figure.Active = true;
 
             }
             foreach (var row in desk.board)
@@ -171,8 +182,10 @@ namespace ChessGL
                 foreach (var cell in row)
                 {
                     // figure.ToDefaultPosition();
-                    pcPlayer.MouseClickEvent += cell.MouseClickEvent;
+                    //pcPlayer.MouseClickEvent += cell.MouseClickEvent;
                     //this.MouseClickEvent += cell.MouseClickEvent;
+                    whitesPlayer.SubscribeCell(cell);
+                    blacksPlayer.SubscribeCell(cell);
                     cell.LoadTexture(game.Content.Load<Texture2D>("green_circle"), game.Content.Load<Texture2D>("frame"));
                     //foreach (var figure in figureList) {
                     //    cell.CellClickEvent += figure.CellClickEvent;
@@ -195,18 +208,22 @@ namespace ChessGL
             font = game.Content.Load<SpriteFont>("basicFont");
 
         }
-        
+
         public void LoadButtons()
         {
             rotateBoardButton = new RotateBoardButton(desk);
             rotateBoardButton.LoadTexture(game.Content.Load<Texture2D>("rotate_board"));
             rotateBoardButton.Position = desk.board[3][7].Position + new Point(150, 100);
-            pcPlayer.MouseClickEvent += rotateBoardButton.MouseClickEvent;
+            //pcPlayer.MouseClickEvent += rotateBoardButton.MouseClickEvent;
 
             previousPositionButton = new PreviousPositionButton(desk);
             previousPositionButton.LoadTexture(game.Content.Load<Texture2D>("back_arrow"));
             previousPositionButton.Position = desk.board[0][7].Position + new Point(150, 100);
-            pcPlayer.MouseClickEvent += previousPositionButton.MouseClickEvent;
+
+            whitesPlayer.SubscribeButtons(this);
+            blacksPlayer.SubscribeButtons(this);
+            //pcPlayer.MouseClickEvent += previousPositionButton.MouseClickEvent;
+            
         }
 
         public void Update()
@@ -224,7 +241,8 @@ namespace ChessGL
                 {
                     if (!figure.Active)
                     {
-                        pcPlayer.MouseClickEvent += figure.MouseClickEvent;
+                        // TODO: Check reset
+                        //pcPlayer.MouseClickEvent += figure.MouseClickEvent;
                         figure.Active = true;
                     }
                     //whitesMove = true;
@@ -233,33 +251,41 @@ namespace ChessGL
             }
 
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.B))
-            {
-                desk.ToDefaultSet();
-                foreach (var figure in figureList)
-                {
-                    figure.Reverse();
-                }
-            }
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.B))
+            //{
+            //    desk.ToDefaultSet();
+            //    foreach (var figure in figureList)
+            //    {
+            //        figure.Reverse();
+            //    }
+            //}
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
+            //{
+            //    desk.RotateBoard();
+            //    Debug.WriteLine("Desk rotated");
+            //}
+            //if (pcPlayer.KingIsDead)
+            if (whitesPlayer.KingIsDead || blacksPlayer.KingIsDead)
             {
-                desk.RotateBoard();
-                Debug.WriteLine("Desk rotated");
+                MatchEnded = true;
             }
             if (desk.WhitesTurn)
             {
-               
-                pcPlayer.Update();
+                whitesPlayer.Update();
+                //pcPlayer.Update();
             }
             else
             {
-                Thread.Sleep(1000);
-                Debug.WriteLine("\n====\n=====\nENGINE MOVE" +
-                    "\n====\n=====\n");
-                enginePlayer.UpdatePosition();
-                enginePlayer.MakeMove();
-                Thread.Sleep(1000);
+                blacksPlayer.Update();
+                //desk.KingsAttacked();
+                //Thread.Sleep(1000);
+                //Debug.WriteLine("\n====\n=====\nENGINE MOVE" +
+                 //   "\n====\n=====\n");
+                //enginePlayer.UpdatePosition();
+                //enginePlayer.MakeMove();
+                //desk.KingsAttacked();
+                //Thread.Sleep(1000);
 
             }
             message = desk.GetHistoryAsString();
@@ -268,8 +294,10 @@ namespace ChessGL
             //message += "WhitesMove = " + desk.WhitesTurn.ToString();
             foreach (var figure in figureList)
             {
-                if (!figure.Active) { if (figure.Subcribed) pcPlayer.MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
-                else { if (!figure.Subcribed) pcPlayer.MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
+                whitesPlayer.CheckFigureSubscription(figure);
+                blacksPlayer.CheckFigureSubscription(figure);
+                //if (!figure.Active) { if (figure.Subcribed) pcPlayer.MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
+                //else { if (!figure.Subcribed) pcPlayer.MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
             }
         }
 

@@ -54,7 +54,7 @@ namespace ChessGL.Figures
                 
                 if (!attackCell.Empty)
                 {
-                    attackCell.figure.PrintDebug();
+                    //attackCell.figure.PrintDebug();
                     var attackPath = attackCell.figure.FindMove(attackCell, desk, false);
                     var attacks = attackPath.FindAll(x => x.figure is King && x.figure.white == white);
                     if (attacks.Count != 0)

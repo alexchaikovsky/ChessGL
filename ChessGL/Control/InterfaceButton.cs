@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ChessGL.Control
 {
-    abstract class InterfaceButton : SelectableEntity
+    public abstract class InterfaceButton : SelectableEntity
     {
         Texture2D texture;
         public void LoadTexture(Texture2D texture)
