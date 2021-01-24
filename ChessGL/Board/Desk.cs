@@ -102,9 +102,11 @@ namespace ChessGL.Board
         {
             size = (int)(162 * resizeOption);
         }
-        bool KingsAttacked()
+        public bool KingsAttacked()
         {
-            return whiteKing.IsAttacked(this) || blackKing.IsAttacked(this);
+            bool whiteAttacked = whiteKing.IsAttacked(this);
+            bool blackAttacked = blackKing.IsAttacked(this);
+            return whiteAttacked || blackAttacked;
         }
         public PositionChange PeekMove()
         {
@@ -168,6 +170,7 @@ namespace ChessGL.Board
             //        kingSafeMoves.Add(cell);
             //    }
             //});
+            // TODO: king under attack not glowing red
             foreach (var cell in possibleMoves)
             {
                 PositionChange safeKingPositionChange = new PositionChange(pathStartingCell, cell, figure, cell.figure);
@@ -175,26 +178,9 @@ namespace ChessGL.Board
                 {
                     kingSafeMoves.Add(cell);
                 }
-
-                //safeKingPositionChange.MakeChange();
-                //if (figure.white)
-                //{
-                //    if (!whiteKing.IsAttacked(this))
-                //    {
-                //        kingSafeMoves.Add(cell);
-                //    }
-                //}
-                //else
-                //{
-                //    if (!blackKing.IsAttacked(this))
-                //    {
-                //        kingSafeMoves.Add(cell);
-                //    }
-                //}
-                //safeKingPositionChange.ReverseChange();
             }
 
-            KingsAttacked();
+            //KingsAttacked();
             ShutPath();
             foreach (var cell in kingSafeMoves) cell.Show = true;
             

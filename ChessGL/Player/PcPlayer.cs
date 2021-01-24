@@ -6,21 +6,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ChessGL.Board;
+using ChessGL.Figures;
 
 namespace ChessGL.Player
 {
-    public class PcPlayer : Player
+    public class PcPlayer : Player, IPlayer
     {
         TwoStageMouse mouse;
         MouseClickEventArgs e;
-        public PcPlayer(Desk desk)
+        public bool IsPcPlayer { get; set; }
+        
+        //public PcPlayer(Desk desk)
+        public PcPlayer()
         {
-            this.desk = desk;
+            //this.desk = desk;
             mouse = new TwoStageMouse();
             e = new MouseClickEventArgs();
             e.positionChange = new PositionChange();
+            KingIsDead = false;
+            IsPcPlayer = true;
         }
-        
+        public bool KingIsDead { get; set; }
         public void Invoke(MouseClickEventArgs e)
         {
             MouseClickEvent(this, e);
@@ -41,7 +47,7 @@ namespace ChessGL.Player
             else if (mouseAnswer == 2)
             {
                 MoveFigure();
-                desk.WhitesTurn = false;
+                
                 Debug.WriteLine("\n====\n=====\nPLAYER MOVE" +
                     "\n====\n=====\n");
             }
@@ -54,7 +60,7 @@ namespace ChessGL.Player
             Invoke(e);
             
 
-            if (e.positionChange.FigureSelected())
+            if (e.positionChange.FigureSelected() && e.positionChange.IsSelectionCorrect())
             {
                 if (desk.currentPath.Contains(e.positionChange.GetEndingCell()))
                 {
@@ -62,6 +68,11 @@ namespace ChessGL.Player
                     //desk.WhitesTurn = !desk.WhitesTurn;
                     desk.AddPositionChange(e.positionChange);
                     e.positionChange = new PositionChange();
+                    desk.WhitesTurn = !desk.WhitesTurn;
+                }
+                else if (desk.currentPath.Count == 0)
+                {
+                    KingIsDead = true;
                 }
 
             }
@@ -77,6 +88,7 @@ namespace ChessGL.Player
             {
 
                 mouse.firstClick = true;
+                e.clickNumber = 1;
                 e.positionChange.SetNull();
 
             }
@@ -84,6 +96,7 @@ namespace ChessGL.Player
             {
                 e.positionChange.UndoSelection();
                 mouse.firstClick = true;
+                e.clickNumber = 1;
                 e.positionChange.SetNull();
             }
             else
@@ -97,10 +110,28 @@ namespace ChessGL.Player
                 {
                     mouse.firstClick = true;
                     e.positionChange.SetNull();
+                    
                 }
             }
         }
-
+        public void SubscribeButtons(Match match)
+        {
+            MouseClickEvent += match.previousPositionButton.MouseClickEvent;
+            MouseClickEvent += match.rotateBoardButton.MouseClickEvent;
+        }
+        public void CheckFigureSubscription(Figure figure)
+        {
+            if (!figure.Active) { if (figure.Subcribed) MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
+            else { if (!figure.Subcribed) MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
+        }
+        public void SubscribeCell(Cell cell)
+        {
+            MouseClickEvent += cell.MouseClickEvent;
+        }
+        public void AddDesk(Desk desk)
+        {
+            this.desk = desk;
+        }
         protected virtual void OnMouseClick(PcPlayer pcPlayer, MouseClickEventArgs e)
         {
             MouseClickEvent?.Invoke(this, e);

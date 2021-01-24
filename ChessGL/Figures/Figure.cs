@@ -125,6 +125,10 @@ namespace ChessGL.Figures
         }
         public bool Move(Cell start, Cell end)
         {
+            if (end.figure != null)
+            {
+                end.figure.Active = false;
+            }
             Move(end);
             start.Empty = true;
             start.figure = null;
@@ -133,13 +137,20 @@ namespace ChessGL.Figures
         }
         public bool Move(Cell start, Cell end, Figure prev)
         {
-            Move(start, end);
+            end.figure.Active = false;
+
+            
             if (prev != null)
             {
                 prev.Active = false;
                 Debug.WriteLine(prev.MyName() + "no more active");
             }
-            
+            //else if (end.figure != null)
+            //{
+            //    end.figure.Active = false;
+            //    Debug.WriteLine(end.figure.MyName() + "no more active");
+            //}
+            Move(start, end);
             return true;
         }
         public void CellClickEvent(object sender, CellEventArgs e)

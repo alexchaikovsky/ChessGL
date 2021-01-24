@@ -9,6 +9,7 @@ namespace ChessGL.Moves
     public class MoveKing : Move, IMove
     {
         public List<Cell> ShowPath(Figure figure, List<List<Cell>> board, Cell pathStartingCell, bool show)
+            // TODO: add castling
         {
             var path = new List<Cell>();
             int col = pathStartingCell.col % 96 - 1, row = Math.Abs(pathStartingCell.row - 8);

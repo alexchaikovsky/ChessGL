@@ -6,7 +6,7 @@ using ChessGL.Board;
 
 namespace ChessGL.Control.Buttons
 {
-    class PreviousPositionButton : InterfaceButton
+    public class PreviousPositionButton : InterfaceButton
     {
         Desk desk;
         public PreviousPositionButton (Desk desk)

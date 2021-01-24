@@ -7,7 +7,7 @@ using ChessGL.Board;
 
 namespace ChessGL.Control.Buttons
 {
-    class RotateBoardButton : InterfaceButton
+    public class RotateBoardButton : InterfaceButton
     {
         Desk desk;
         public RotateBoardButton(Desk desk)

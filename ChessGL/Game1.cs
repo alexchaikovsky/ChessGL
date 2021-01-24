@@ -9,6 +9,7 @@ using System.Diagnostics;
 using ChessGL.Control.Buttons;
 using ChessGL.Menu;
 using ChessGL.Control;
+using ChessGL.Player;
 
 
 
@@ -68,13 +69,18 @@ namespace ChessGL
             if (MatchStarted)
             {
                 match.Update();
+                if (match.MatchEnded)
+                {
+                    MatchStarted = false;
+                }
+                
             }
             else
             {
                 switch(startMenu.Update())
                 {
                     case 1:
-                        match = new Match(this, _spriteBatch);
+                        match = new Match(this, _spriteBatch, new PcPlayer(), new PcPlayer());
                         match.LoadButtons();
                         match.CreateFigures();
                         MatchStarted = true;
@@ -84,6 +90,14 @@ namespace ChessGL
                         _graphics.ApplyChanges();
                         break;
                     case 2:
+                        match = new Match(this, _spriteBatch, new PcPlayer(), new EnginePlayer());
+                        match.LoadButtons();
+                        match.CreateFigures();
+                        MatchStarted = true;
+                        Window.Position = new Point(0, 30);
+                        _graphics.PreferredBackBufferWidth = 1200;
+                        _graphics.PreferredBackBufferHeight = 1000;
+                        _graphics.ApplyChanges();
                         break;
                     default:
                         break;
