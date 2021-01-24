@@ -12,7 +12,7 @@ namespace ChessGL.Moves
         {
             int col = pathStartingCell.col % 96 - 1, row = Math.Abs(pathStartingCell.row - 8);
             var path = new List<Cell>();
-            Debug.WriteLine($"{board.Count}, {board[0].Count}\nrow={row},col={col}, cell={pathStartingCell.row}{(char)pathStartingCell.col}");
+            //Debug.WriteLine($"{board.Count}, {board[0].Count}\nrow={row},col={col}, cell={pathStartingCell.row}{(char)pathStartingCell.col}");
             for (int i = col + 1; i < 8; i++) //moveleft
             {
                 row++;

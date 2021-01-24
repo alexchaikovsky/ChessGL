@@ -14,24 +14,41 @@ namespace ChessGL.Board
         public List<List<Cell>> board;
         public List<List<Cell>> originalPositions;
         public List<Cell> currentPath;
+        List<string> stringHistory;
         Stack <PositionChange> history;
         Texture2D deskTexture;
         King whiteKing;
         King blackKing;
         int size;
-        
+        string[] engineHistory;
+
         int whitePerspective; // 1 if player plays white else -1
         bool deskRotated;
         public bool WhitesTurn { get; set; }
+        public string[] GetHistoryAsStringArray() 
+        {
+            return stringHistory.ToArray();
+            
+        }
+        public string GetHistoryAsString()
+        {
+            string historyString = "";
+            foreach (var pos in stringHistory)
+            {
+                historyString += pos;
+                historyString += " ";
+            }
+            return historyString;
+        }
         public Desk(Single resizeOption = 1, int whitePerspective = -1)
         {
             currentPath = new List<Cell>();
             this.whitePerspective = whitePerspective;
             history = new Stack<PositionChange>();
-
+            
             WhitesTurn = true;
             board = new List<List<Cell>>();
-
+            stringHistory = new List<string>();
             int firstCellX = 32;
             int firstCellY = 33;
             var point = new Point(firstCellX, firstCellY);
@@ -62,15 +79,18 @@ namespace ChessGL.Board
         {
             Debug.WriteLine("Added position");
             history.Push(positionChange);
+            string lastMove = $"{positionChange.GetStartingCell().ToString()}{positionChange.GetEndingCell().ToString()}";
+            stringHistory.Add(lastMove);
         }
         public void MoveBack()
         {
             Debug.WriteLine("called MoveBack()");
             if (history.Count != 0)
             {
-                WhitesTurn = !WhitesTurn;
+                //WhitesTurn = !WhitesTurn;
                 var prevPosition = history.Pop();
                 prevPosition.ReverseChange();
+                
             }
         }
         public void AddKings(King whiteKing, King blackKing)
@@ -85,6 +105,10 @@ namespace ChessGL.Board
         bool KingsAttacked()
         {
             return whiteKing.IsAttacked(this) || blackKing.IsAttacked(this);
+        }
+        public PositionChange PeekMove()
+        {
+            return history.Peek();
         }
         public void PlaceCell(Cell cell)
         {

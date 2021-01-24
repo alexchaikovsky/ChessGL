@@ -9,10 +9,10 @@ namespace ChessGL.Board
 {
     public class PositionChange
     {
-        Cell startingCell;
-        Cell endingCell;
-        Figure startingFigure;
-        Figure endingFigure;
+        public Cell startingCell;
+        public Cell endingCell;
+        public Figure startingFigure;
+        public Figure endingFigure;
         public PositionChange()
         {
             this.startingCell = null;
@@ -36,7 +36,10 @@ namespace ChessGL.Board
         }
         public bool IsSelectionCorrect()
         {
-            return startingCell.figure == startingFigure && startingFigure.cell == startingCell;
+            // TODO: проверить выбор фигур (тест: при атаке черной пешкой короля при выборе ладьи а затем переключении на короля и при съедении пешки ладья перескакивает на место короля) 
+            return (startingCell.figure == startingFigure && startingFigure.cell == startingCell) 
+                || 
+                (startingCell != endingCell && startingFigure != endingFigure);
         }
         public void SetStartingFigure(Figure figure)
         {

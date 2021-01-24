@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using System.Threading;
 
 using ChessGL.Control;
 using ChessGL.Board;
@@ -16,30 +17,17 @@ namespace ChessGL
 {
     public class Match
     {
-        //List<Cell> currentPath;
-
         PositionChange currentChange;
-        List<Cell> currentPath;
         RotateBoardButton rotateBoardButton;
         PreviousPositionButton previousPositionButton;
 
-        Texture2D queenTexture;
         Texture2D deskTexture;
         MouseClickEventArgs e;
-        //private MouseState lastMouseState = new MouseState();
-        TwoStageMouse mouse;
-        //bool entitySelected = false;
-        //bool whitesMove = true;
-        //bool mousePressed = false;
-        //ISelectableEntity selectedEntity;
-        Figure selectedFigure;
         Game game;
-        Vector2 queenPosition;
 
         Queen whiteQueen;
         King whiteKing;
         King blackKing;
-        //Pawn blackPawn;
 
         SpriteFont font;
         
@@ -47,21 +35,22 @@ namespace ChessGL
         string message = "Init";
         List<Figure> figureList;
         Desk desk;
-        //MouseState mouse;
         PcPlayer pcPlayer;
+        EnginePlayer enginePlayer;
         private SpriteBatch _spriteBatch;
 
         public Match(Game game, SpriteBatch spriteBatch)
         {
             this._spriteBatch = spriteBatch;
             this.game = game;
-            mouse = new TwoStageMouse();
+            //mouse = new TwoStageMouse();
             desk = new Desk(0.7f);
             figureList = new List<Figure>();
             e = new MouseClickEventArgs();
             currentChange = new PositionChange();
             e.positionChange = currentChange;
             pcPlayer = new PcPlayer(desk);
+            enginePlayer = new EnginePlayer(desk);
         }
         public void CreateFigures()
         {
@@ -258,11 +247,25 @@ namespace ChessGL
                 desk.RotateBoard();
                 Debug.WriteLine("Desk rotated");
             }
+            if (desk.WhitesTurn)
+            {
+               
+                pcPlayer.Update();
+            }
+            else
+            {
+                Thread.Sleep(1000);
+                Debug.WriteLine("\n====\n=====\nENGINE MOVE" +
+                    "\n====\n=====\n");
+                enginePlayer.UpdatePosition();
+                enginePlayer.MakeMove();
+                Thread.Sleep(1000);
 
-            pcPlayer.Update();
-            message = "";
-            message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
-            message += "WhitesMove = " + desk.WhitesTurn.ToString();
+            }
+            message = desk.GetHistoryAsString();
+            //message = "";
+            //message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
+            //message += "WhitesMove = " + desk.WhitesTurn.ToString();
             foreach (var figure in figureList)
             {
                 if (!figure.Active) { if (figure.Subcribed) pcPlayer.MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }

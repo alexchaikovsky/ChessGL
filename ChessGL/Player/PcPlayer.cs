@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using ChessGL.Control;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +13,6 @@ namespace ChessGL.Player
     {
         TwoStageMouse mouse;
         MouseClickEventArgs e;
-        Desk desk;
         public PcPlayer(Desk desk)
         {
             this.desk = desk;
@@ -42,6 +41,9 @@ namespace ChessGL.Player
             else if (mouseAnswer == 2)
             {
                 MoveFigure();
+                desk.WhitesTurn = false;
+                Debug.WriteLine("\n====\n=====\nPLAYER MOVE" +
+                    "\n====\n=====\n");
             }
         }
         public void MoveFigure()
@@ -57,7 +59,7 @@ namespace ChessGL.Player
                 if (desk.currentPath.Contains(e.positionChange.GetEndingCell()))
                 {
                     e.positionChange.MakeChange();
-                    desk.WhitesTurn = !desk.WhitesTurn;
+                    //desk.WhitesTurn = !desk.WhitesTurn;
                     desk.AddPositionChange(e.positionChange);
                     e.positionChange = new PositionChange();
                 }

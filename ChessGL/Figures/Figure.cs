@@ -116,7 +116,7 @@ namespace ChessGL.Figures
 
         public bool Move(Cell cell)
         {
-            Debug.WriteLine("MOVE " + MyName() + $"CELL {cell.row}{(char)cell.col}");
+            //Debug.WriteLine("MOVE " + MyName() + $"CELL {cell.row}{(char)cell.col}");
             Position = cell.Position;
             cell.figure = this;
             cell.Empty = false;
@@ -208,7 +208,7 @@ namespace ChessGL.Figures
                             //e.positionChange.GetStartingFigure() ostartingFigure = this as Figure;
                             e.positionChange.SetStartingFigure(this);
                             Selected = true;
-                            Debug.WriteLine($"SELECTED {this.MyName()}");
+                            //Debug.WriteLine($"SELECTED {this.MyName()}");
                             CallAnswerEvent();
                         }
                         break;
