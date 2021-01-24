@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using ChessGL.Control.Buttons;
-using ChessGL.Board;
+using ChessGL.Menu;
 using ChessGL.Control;
 
 
@@ -19,6 +19,8 @@ namespace ChessGL
         Match match;
         bool MatchStarted;
 
+        //StartTestMatchButton startTestMatchButton;
+        StartMenu startMenu;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -39,6 +41,7 @@ namespace ChessGL
         {
             base.Initialize();
             base.Window.AllowUserResizing = true;
+            
             //mouse = new MouseState();
         }
 
@@ -48,12 +51,9 @@ namespace ChessGL
         {
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            match = new Match(this, _spriteBatch);
-            match.LoadButtons();
-            match.CreateFigures();
-            MatchStarted = true;
-
-            // TODO: use this.Content to load your game content here
+            startMenu = new StartMenu();
+            startMenu.LoadButtons(Content.Load<Texture2D>("menu_button"), Content.Load<Texture2D>("engine_menu_button"));
+           
         }
 
         protected override void Update(GameTime gameTime)
@@ -69,6 +69,39 @@ namespace ChessGL
             {
                 match.Update();
             }
+            else
+            {
+                switch(startMenu.Update())
+                {
+                    case 1:
+                        match = new Match(this, _spriteBatch);
+                        match.LoadButtons();
+                        match.CreateFigures();
+                        MatchStarted = true;
+                        Window.Position = new Point(0, 30);
+                        _graphics.PreferredBackBufferWidth = 1200;
+                        _graphics.PreferredBackBufferHeight = 1000;
+                        _graphics.ApplyChanges();
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        break;
+                }
+                //if (startMenu.Update() == 1)
+                //{
+                    
+                //    match = new Match(this, _spriteBatch);
+                //    match.LoadButtons();
+                //    match.CreateFigures();
+                //    MatchStarted = true;
+                //    Window.Position = new Point(0, 30);
+                //    _graphics.PreferredBackBufferWidth = 1200;
+                //    _graphics.PreferredBackBufferHeight = 1000;
+                //    _graphics.ApplyChanges();
+                //}
+
+            }
             base.Update(gameTime);
         }
 
@@ -77,14 +110,23 @@ namespace ChessGL
             GraphicsDevice.Clear(Color.CornflowerBlue);
            
             _spriteBatch.Begin();
+           
             if (MatchStarted)
             {
                 match.Draw();
             }
+            else
+            {
+                startMenu.Draw(_spriteBatch);
+            }
+            //startTestMatchButton.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
+        
+
     }
     
 }

@@ -51,7 +51,7 @@ namespace ChessGL.Board
         }
         public override string ToString()
         {
-            return $"Cell {row}{(char)col}";
+            return $"{(char)col}{row}";
         }
         public override void CallAnswerEvent()
         {
@@ -85,7 +85,7 @@ namespace ChessGL.Board
                         {
                             //e.startingCell = this;
                             e.positionChange.SetStartingCell(this);
-                            Debug.WriteLine($"1st click CELL {this.MyName()}");
+                            //Debug.WriteLine($"1st click CELL {this.MyName()}");
                         }
                         break;
                     case 2:
@@ -93,7 +93,7 @@ namespace ChessGL.Board
                         {
                             e.positionChange.SetEndingCell(this);
                             //e.endingCell = this;
-                            Debug.WriteLine($"2nd click CELL {this.MyName()}");
+                            //Debug.WriteLine($"2nd click CELL {this.MyName()}");
                         }
                         break;
                 }

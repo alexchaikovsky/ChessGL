@@ -12,7 +12,7 @@ namespace ChessGL.Moves
         {
             int col = pathStartingCell.col % 96 - 1, row = Math.Abs(pathStartingCell.row - 8);
             var path = new List<Cell>();
-            Debug.WriteLine($"{board.Count}, {board[0].Count}\nrow={row},col={col}, cell={pathStartingCell.row}{(char)pathStartingCell.col}");
+            //Debug.WriteLine($"{board.Count}, {board[0].Count}\nrow={row},col={col}, cell={pathStartingCell.row}{(char)pathStartingCell.col}");
             for (int i = col + 1; i < 8; i++) //moveleft
             {
                 //Debug.WriteLine("Checking" + board[row][i].ToString());
@@ -29,7 +29,7 @@ namespace ChessGL.Moves
                 path.Add(board[row][i]);
                 board[row][i].Show = show;
             }
-            Debug.Write("left");
+            //Debug.Write("left");
             for (int i = col - 1; i >= 0; i--) //moveright
             {
                 //Debug.WriteLine("Checking" + board[row][i].ToString());
@@ -46,7 +46,7 @@ namespace ChessGL.Moves
                 path.Add(board[row][i]);
                 board[row][i].Show = show;
             }
-            Debug.Write("right");
+            //Debug.Write("right");
             for (int i = row + 1; i < 8; i++) //moveup
             {
                 //Debug.WriteLine("Checking" + board[i][col].ToString());
@@ -63,7 +63,7 @@ namespace ChessGL.Moves
                 path.Add(board[i][col]);
                 board[i][col].Show = show;
             }
-            Debug.Write("up");
+            //Debug.Write("up");
             for (int i = row - 1; i >= 0; i--) //movedowm
             {
                 //Debug.WriteLine("Checking" + board[i][col].ToString());
@@ -80,7 +80,7 @@ namespace ChessGL.Moves
                 path.Add(board[i][col]);
                 board[i][col].Show = show;
             }
-            Debug.WriteLine("down");
+            //Debug.WriteLine("down");
             return path;
         }
         
