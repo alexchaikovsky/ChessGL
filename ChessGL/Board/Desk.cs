@@ -20,7 +20,6 @@ namespace ChessGL.Board
         King whiteKing;
         King blackKing;
         int size;
-        string[] engineHistory;
 
         int whitePerspective; // 1 if player plays white else -1
         bool deskRotated;
@@ -90,6 +89,7 @@ namespace ChessGL.Board
                 //WhitesTurn = !WhitesTurn;
                 var prevPosition = history.Pop();
                 prevPosition.ReverseChange();
+                stringHistory.RemoveAt(stringHistory.Count - 1);
                 
             }
         }
@@ -105,7 +105,9 @@ namespace ChessGL.Board
         public bool KingsAttacked()
         {
             bool whiteAttacked = whiteKing.IsAttacked(this);
+            whiteKing.UnderAttack = whiteAttacked;
             bool blackAttacked = blackKing.IsAttacked(this);
+            blackKing.UnderAttack = blackAttacked;
             return whiteAttacked || blackAttacked;
         }
         public PositionChange PeekMove()
@@ -161,6 +163,8 @@ namespace ChessGL.Board
         public List<Cell> ShowPath(Cell pathStartingCell, Figure figure)
         {
             var possibleMoves = figure.FindMove(pathStartingCell, this);
+            //bool whiteKingAttacked = whiteKing.IsAttacked(this);
+            //bool blackKingAttacked = blackKing.IsAttacked(this);
             List<Cell> kingSafeMoves = new List<Cell>();
             //Parallel.ForEach(possibleMoves, (cell) =>
             //{
@@ -171,6 +175,7 @@ namespace ChessGL.Board
             //    }
             //});
             // TODO: king under attack not glowing red
+            Debug.WriteLine($"ALL POSSIBLE MOVES COUNT: {possibleMoves.Count}");
             foreach (var cell in possibleMoves)
             {
                 PositionChange safeKingPositionChange = new PositionChange(pathStartingCell, cell, figure, cell.figure);
@@ -183,7 +188,9 @@ namespace ChessGL.Board
             //KingsAttacked();
             ShutPath();
             foreach (var cell in kingSafeMoves) cell.Show = true;
-            
+            //whiteKing.UnderAttack = whiteKingAttacked;
+            //blackKing.UnderAttack = blackKingAttacked;
+            //KingsAttacked();
             return kingSafeMoves;
             //return possibleMoves;
         }

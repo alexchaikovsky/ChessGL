@@ -28,9 +28,6 @@ namespace ChessGL.Player
 
         public void UpdatePosition()
         {
-            //string[] history = new string[desk.history.];
-            //var lastPositionChange = desk.PeekMove();
-            //Debug.WriteLine($"Update Pos{lastPositionChange.GetStartingCell().ToString()}{lastPositionChange.GetEndingCell().ToString()}");
             foreach (var pos in desk.GetHistoryAsStringArray())
             {
                 Debug.WriteLine(pos);

@@ -98,11 +98,17 @@ namespace ChessGL.Board
         public void ReverseChange()
         {
             startingFigure.Move(endingCell, startingCell);
-            if (endingFigure!= null)
+            if (endingFigure != null)
             {
                 endingFigure.Active = true;
                 endingFigure.cell = endingCell;
                 endingFigure.Move(endingCell);
+            }
+            else if (endingCell.figure != null)
+            {
+                endingCell.figure.Active = true;
+                endingCell.figure.cell = endingCell;
+                endingCell.figure.Move(endingCell);
             }
             //endingCell.figure = endingFigure;
             Debug.WriteLine("STARTF" + startingFigure.MyName()

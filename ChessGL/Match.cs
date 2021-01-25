@@ -30,7 +30,7 @@ namespace ChessGL
         King blackKing;
 
         SpriteFont font;
-        
+        int lastLength;
 
         string message = "Init";
         List<Figure> figureList;
@@ -59,7 +59,10 @@ namespace ChessGL
             this.whitesPlayer.AddDesk(desk);
             this.blacksPlayer.AddDesk(desk);
             MatchEnded = false;
+            MoveMade = false;
+            lastLength = 0;
         }
+        public bool MoveMade { get; set; }
         public void CreateFigures()
         {
             
@@ -251,21 +254,7 @@ namespace ChessGL
             }
 
 
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.B))
-            //{
-            //    desk.ToDefaultSet();
-            //    foreach (var figure in figureList)
-            //    {
-            //        figure.Reverse();
-            //    }
-            //}
-
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
-            //{
-            //    desk.RotateBoard();
-            //    Debug.WriteLine("Desk rotated");
-            //}
-            //if (pcPlayer.KingIsDead)
+           
             if (whitesPlayer.KingIsDead || blacksPlayer.KingIsDead)
             {
                 MatchEnded = true;
@@ -273,31 +262,49 @@ namespace ChessGL
             if (desk.WhitesTurn)
             {
                 whitesPlayer.Update();
-                //pcPlayer.Update();
+                //desk.KingsAttacked();
             }
             else
             {
                 blacksPlayer.Update();
                 //desk.KingsAttacked();
-                //Thread.Sleep(1000);
-                //Debug.WriteLine("\n====\n=====\nENGINE MOVE" +
-                 //   "\n====\n=====\n");
-                //enginePlayer.UpdatePosition();
-                //enginePlayer.MakeMove();
-                //desk.KingsAttacked();
-                //Thread.Sleep(1000);
+                
 
             }
-            message = desk.GetHistoryAsString();
-            //message = "";
-            //message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
-            //message += "WhitesMove = " + desk.WhitesTurn.ToString();
-            foreach (var figure in figureList)
+            if (desk.GetHistoryAsStringArray().Length != lastLength)
             {
-                whitesPlayer.CheckFigureSubscription(figure);
-                blacksPlayer.CheckFigureSubscription(figure);
-                //if (!figure.Active) { if (figure.Subcribed) pcPlayer.MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
-                //else { if (!figure.Subcribed) pcPlayer.MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
+                if (desk.KingsAttacked())
+                {
+                    int whitePossibleMovesNumber = 0; int blackPossibleMovesNumber = 0;
+
+                    foreach (var figure in figureList)
+                    {
+                        if (figure.white && figure.Active)
+                        whitePossibleMovesNumber += desk.ShowPath(figure.cell, figure).Count;
+                        else if (!figure.white && figure.Active) blackPossibleMovesNumber += desk.ShowPath(figure.cell, figure).Count;
+                    }
+                    if (whitePossibleMovesNumber == 0)
+                    {
+                        MatchEnded = true;
+                        Debug.WriteLine("WHITE LOSE!");
+                    }
+                    else if (blackPossibleMovesNumber == 0)
+                    {
+                        MatchEnded = true;
+                        Debug.WriteLine("BLACK LOSE!");
+                    }
+                }
+                
+                message = desk.GetHistoryAsString();
+                //message = "";
+                //message += " X: " + selectedFigure?.Position.X.ToString() + " Y: " + selectedFigure?.Position.Y.ToString() + " ";
+                //message += "WhitesMove = " + desk.WhitesTurn.ToString();
+                foreach (var figure in figureList)
+                {
+                    if (figure.white) whitesPlayer.CheckFigureSubscription(figure);
+                    else blacksPlayer.CheckFigureSubscription(figure);
+                }
+                lastLength = desk.GetHistoryAsStringArray().Length;
             }
         }
 

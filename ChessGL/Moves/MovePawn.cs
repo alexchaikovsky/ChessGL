@@ -21,7 +21,7 @@ namespace ChessGL.Moves
                 {
                     if (board[row + 2][col].Empty && board[row + 1][col].Empty)
                     {
-                        board[row + 2][col].Show = show;
+                       // board[row + 2][col].Show = show;
                         path.Add(board[row + 2][col]);
                     }
                 }
@@ -29,17 +29,17 @@ namespace ChessGL.Moves
                 {
                     if (Move.InBounds(col + 1) && !board[pathRow][col + 1].Empty && figure.CanEat(board[pathRow][col + 1].figure))
                     {
-                        board[pathRow][col + 1].Show = show;
+                       // board[pathRow][col + 1].Show = show;
                         path.Add(board[pathRow][col + 1]);
                     }
                     if (Move.InBounds(col - 1) && !board[pathRow][col - 1].Empty && figure.CanEat(board[pathRow][col - 1].figure))
                     {
-                        board[pathRow][col - 1].Show = show;
+                       // board[pathRow][col - 1].Show = show;
                         path.Add(board[pathRow][col - 1]);
                     }
                     if (Move.InBounds(col) && board[pathRow][col].Empty)
                     {
-                        board[pathRow][col].Show = show;
+                       // board[pathRow][col].Show = show;
                         path.Add(board[pathRow][col]);
                     }
                 }
@@ -50,7 +50,7 @@ namespace ChessGL.Moves
                 {
                     if (board[row - 2][col].Empty && board[row - 1][col].Empty)
                     {
-                        board[row - 2][col].Show = show;
+                        //board[row - 2][col].Show = show;
                         path.Add(board[row - 2][col]);
                     }
                 }
@@ -58,17 +58,17 @@ namespace ChessGL.Moves
                 {
                     if (Move.InBounds(col + 1) && !board[pathRow][col + 1].Empty && figure.CanEat(board[pathRow][col + 1].figure))
                     {
-                        board[pathRow][col + 1].Show = show;
+                        //board[pathRow][col + 1].Show = show;
                         path.Add(board[pathRow][col + 1]);
                     }
                     if (Move.InBounds(col - 1) && !board[pathRow][col - 1].Empty && figure.CanEat(board[pathRow][col - 1].figure))
                     {
-                        board[pathRow][col - 1].Show = show;
+                       //board[pathRow][col - 1].Show = show;
                         path.Add(board[pathRow][col - 1]);
                     }
                     if (Move.InBounds(col) && board[pathRow][col].Empty)
                     {
-                        board[pathRow][col].Show = show;
+                       // board[pathRow][col].Show = show;
                         path.Add(board[pathRow][col]);
                     }
                 }

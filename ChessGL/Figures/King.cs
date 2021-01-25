@@ -59,12 +59,12 @@ namespace ChessGL.Figures
                     var attacks = attackPath.FindAll(x => x.figure is King && x.figure.white == white);
                     if (attacks.Count != 0)
                     {
-                        UnderAttack = true;
+                        //UnderAttack = true;
                         return true;
                     }
                 }
             }
-            UnderAttack = false;
+            //UnderAttack = false;
             return false;
         }
     }
