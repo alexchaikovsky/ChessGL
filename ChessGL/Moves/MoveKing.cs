@@ -23,7 +23,7 @@ namespace ChessGL.Moves
                     {
                         if (board[i][j].Empty || figure.CanEat(board[i][j].figure))
                         {
-                            board[i][j].Show = show;
+                            //board[i][j].Show = show;
                             path.Add(board[i][j]);
                         }
                     }

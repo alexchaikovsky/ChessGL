@@ -70,10 +70,8 @@ namespace ChessGL.Player
                     e.positionChange = new PositionChange();
                     desk.WhitesTurn = !desk.WhitesTurn;
                 }
-                else if (desk.currentPath.Count == 0)
-                {
-                    KingIsDead = true;
-                }
+                
+                
 
             }
 
@@ -106,6 +104,7 @@ namespace ChessGL.Player
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;
                 //Debug.WriteLine($"ElapsedMS::{elapsedMs}");
+                Debug.WriteLine($"PATH cells num: {desk.currentPath.Count}");
                 if (desk.currentPath.Count == 0)
                 {
                     mouse.firstClick = true;
@@ -121,8 +120,10 @@ namespace ChessGL.Player
         }
         public void CheckFigureSubscription(Figure figure)
         {
+            Debug.WriteLine($"Before check Cell {figure.cell} Figure = {figure.MyName()} Active = {figure.Active} Subscribed = {figure.Subcribed}");
             if (!figure.Active) { if (figure.Subcribed) MouseClickEvent -= figure.MouseClickEvent; figure.Subcribed = false; }
             else { if (!figure.Subcribed) MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
+            Debug.WriteLine($"After check Cell {figure.cell} Figure = {figure.MyName()} Active = {figure.Active} Subscribed = {figure.Subcribed}");
         }
         public void SubscribeCell(Cell cell)
         {

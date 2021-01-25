@@ -57,48 +57,7 @@ namespace ChessGL.Moves
                     Debug.WriteLine("in area");
                     this.Action();
                 }
-                //Debug.WriteLine($"EVENT {this.MyName()}");
-                //if (Selectable)
-                //{
-                //    switch (e.clickNumber)
-                //    {
-                //        case 1:
-                //            if (PointInEntityArea(e.point) && !Selected)
-                //            {
-                //                e.startingFigure = this as Figure;
-
-                //                Selected = true;
-                //                Debug.WriteLine($"SELECTED {this.MyName()}");
-                //                CallAnswerEvent();
-                //            }
-                //            break;
-                //        case 2:
-                //            if (Selected)
-                //            {
-                //                if (this is Figure)
-                //                {
-                //                    e.startingFigure = this as Figure;
-                //                }
-                //                Position = e.point;
-                //                Selected = false;
-                //                Debug.WriteLine($"MOVED {this.MyName()}");
-                //            }
-                //            break;
-                //    }
-
-                //}
-                //else
-                //{
-                //    //if (PointInEntityArea(e.point))
-                //    //{
-                //    //    Debug.WriteLine($"UNSELECTABLE {this.MyName()}");
-                //    //    if (this is Cell)
-                //    //    {
-                //    //        e.cell = this as Cell;
-                //    //    }
-                //    //    //CallAnswerEvent();
-                //    //}
-                //}
+                
             }
         }
     }

@@ -22,12 +22,12 @@ namespace ChessGL.Moves
                     if (figure.CanEat(board[row][i].figure))
                     {
                         path.Add(board[row][i]);
-                        board[row][i].Show = show;
+                        //board[row][i].Show = show;
                     }
                     break;
                 }
                 path.Add(board[row][i]);
-                board[row][i].Show = show;
+                //board[row][i].Show = show;
             }
             //Debug.Write("left");
             for (int i = col - 1; i >= 0; i--) //moveright
@@ -39,12 +39,12 @@ namespace ChessGL.Moves
                     if (figure.CanEat(board[row][i].figure))
                     {
                         path.Add(board[row][i]);
-                        board[row][i].Show = show;
+                        //board[row][i].Show = show;
                     }
                     break;
                 }
                 path.Add(board[row][i]);
-                board[row][i].Show = show;
+               // board[row][i].Show = show;
             }
             //Debug.Write("right");
             for (int i = row + 1; i < 8; i++) //moveup
@@ -56,12 +56,12 @@ namespace ChessGL.Moves
                     if (figure.CanEat(board[i][col].figure))
                     {
                         path.Add(board[i][col]);
-                        board[i][col].Show = show;
+                       // board[i][col].Show = show;
                     }
                     break;
                 }
                 path.Add(board[i][col]);
-                board[i][col].Show = show;
+               // board[i][col].Show = show;
             }
             //Debug.Write("up");
             for (int i = row - 1; i >= 0; i--) //movedowm
@@ -73,12 +73,12 @@ namespace ChessGL.Moves
                     if (figure.CanEat(board[i][col].figure))
                     {
                         path.Add(board[i][col]);
-                        board[i][col].Show = show;
+                       // board[i][col].Show = show;
                     }
                     break;
                 }
                 path.Add(board[i][col]);
-                board[i][col].Show = show;
+               // board[i][col].Show = show;
             }
             //Debug.WriteLine("down");
             return path;

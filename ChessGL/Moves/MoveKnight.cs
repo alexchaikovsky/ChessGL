@@ -19,7 +19,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -30,7 +30,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -41,7 +41,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -51,7 +51,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -61,7 +61,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -71,7 +71,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -81,7 +81,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
@@ -91,7 +91,7 @@ namespace ChessGL.Moves
             {
                 if (board[tryRow][tryCol].Empty || figure.CanEat(board[tryRow][tryCol].figure))
                 {
-                    board[tryRow][tryCol].Show = show;
+                    //board[tryRow][tryCol].Show = show;
                     path.Add(board[tryRow][tryCol]);
                 }
             }
