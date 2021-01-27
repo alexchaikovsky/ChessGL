@@ -11,7 +11,7 @@ namespace ChessGL.Figures
 {
     public abstract class Figure : SelectableEntity
     {
-        protected Cell defaultCell;
+        public Cell defaultCell;
         public Cell cell;
         protected Texture2D texture;
         protected List<IMove> moveTypes;
@@ -88,6 +88,7 @@ namespace ChessGL.Figures
         {
             //Position = defaultPosition;
             Move(defaultCell);
+            Active = true;
         }
         public void Reverse()
         {

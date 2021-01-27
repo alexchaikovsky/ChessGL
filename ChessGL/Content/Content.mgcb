@@ -188,6 +188,18 @@
 /processorParam:TextureFormat=Color
 /build:rotate_board.png
 
+#begin start_menu.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:start_menu.jpg
+
 #begin white_bishop.png
 /importer:TextureImporter
 /processor:TextureProcessor

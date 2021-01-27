@@ -6,7 +6,8 @@ namespace ChessGL.Figures
 {
     class Pawn : Figure
     {
-        
+        // TODO: add transfomation on last row
+        // TODO: check right white pawn creatin path circles on default position after check
         public Pawn(bool white, Cell defaultCell)
         {
             this.white = white;

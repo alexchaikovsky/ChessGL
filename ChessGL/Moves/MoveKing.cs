@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ChessGL.Figures;
 using ChessGL.Board;
+using System.Diagnostics;
 
 namespace ChessGL.Moves
 {
@@ -29,7 +30,43 @@ namespace ChessGL.Moves
                     }
                 }
             }
-            
+            if (pathStartingCell.Position == figure.GetDefaultPosition())
+            {
+                bool leftCastle = false;
+                bool rightCastle = false;
+
+                if (board[row][0].figure is Rook)
+                {
+                    leftCastle = true;
+                    for (int i = 1; i < col; i++)
+                    {
+                        Debug.WriteLine($"i={i} Checking {board[row][i]}");
+                        if (!(board[row][i].figure == null))
+                        {
+                            Debug.WriteLine("not empty");
+                            leftCastle = false;
+                            
+                        }
+                    }
+                }
+                if (board[row][7].figure is Rook) {
+                    rightCastle = true;
+                    for (int i = col + 1; i < 7; i++)
+                    {
+                        Debug.WriteLine($"i={i} Checking {board[row][i]}");
+                        if (!(board[row][i].figure == null))
+                        {
+                            Debug.WriteLine("not empty");
+                            rightCastle = false;
+                        }
+                    }
+                }
+
+                if (leftCastle) path.Add(board[row][col - 2]);
+                if (rightCastle) path.Add(board[row][col + 2]);
+                Debug.WriteLine($"lc {leftCastle} rc {rightCastle}");
+                //if (board[row][])
+            }
             //if (pathStartingCell.Position == figure.GetDefaultPosition())
             //{
             //    for (int i = 5; i < 7; i++)

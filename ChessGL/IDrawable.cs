@@ -8,6 +8,8 @@ namespace ChessGL
 {
     interface IDrawable
     {
+        Texture2D Texture { get; set; }
+        public Point Position { get; set; }
         void Draw(SpriteBatch spriteBatch);
     }
 }

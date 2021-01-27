@@ -41,7 +41,7 @@ namespace ChessGL
         protected override void Initialize()
         {
             base.Initialize();
-            base.Window.AllowUserResizing = true;
+            //base.Window.AllowUserResizing = true;
             
             //mouse = new MouseState();
         }
@@ -52,9 +52,13 @@ namespace ChessGL
         {
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            startMenu = new StartMenu();
+            startMenu = new StartMenu(Content.Load<Texture2D>("start_menu"), new Point(0, 0));
             startMenu.LoadButtons(Content.Load<Texture2D>("menu_button"), Content.Load<Texture2D>("engine_menu_button"));
-           
+            Window.Position = new Point(500, 100);
+            _graphics.PreferredBackBufferWidth = 550;
+            _graphics.PreferredBackBufferHeight = 900;
+            _graphics.ApplyChanges();
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,6 +89,7 @@ namespace ChessGL
                         match.CreateFigures();
                         MatchStarted = true;
                         Window.Position = new Point(0, 30);
+                        Window.AllowUserResizing = true;
                         _graphics.PreferredBackBufferWidth = 1200;
                         _graphics.PreferredBackBufferHeight = 1000;
                         _graphics.ApplyChanges();
@@ -95,6 +100,7 @@ namespace ChessGL
                         match.CreateFigures();
                         MatchStarted = true;
                         Window.Position = new Point(0, 30);
+                        Window.AllowUserResizing = true;
                         _graphics.PreferredBackBufferWidth = 1200;
                         _graphics.PreferredBackBufferHeight = 1000;
                         _graphics.ApplyChanges();
@@ -131,6 +137,8 @@ namespace ChessGL
             }
             else
             {
+                base.Window.Title = "ChessGL";
+                startMenu.ResizeOption = 5f;
                 startMenu.Draw(_spriteBatch);
             }
             //startTestMatchButton.Draw(_spriteBatch);

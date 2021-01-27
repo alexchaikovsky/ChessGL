@@ -19,6 +19,7 @@ namespace ChessGL.Board
             this.endingCell = null;
             this.startingFigure = null;
             this.endingFigure = null;
+            Castle = 0;
         }
         public PositionChange(Cell startingCell, Cell endingCell, Figure startingFigure, Figure endingFigure)
         {
@@ -26,6 +27,7 @@ namespace ChessGL.Board
             this.endingCell = endingCell;
             this.startingFigure = startingFigure;
             this.endingFigure = endingFigure;
+            Castle = 0;
         }
         public void SetNull()
         {
@@ -33,6 +35,7 @@ namespace ChessGL.Board
             this.endingCell = null;
             this.startingFigure = null;
             this.endingFigure = null;
+            Castle = 0;
         }
         public bool IsSelectionCorrect()
         {
@@ -53,6 +56,7 @@ namespace ChessGL.Board
         {
             startingCell = cell;
         }
+        public int Castle { get; set; }
         public void SetEndingCell(Cell cell)
         {
             endingCell = cell;
@@ -85,6 +89,32 @@ namespace ChessGL.Board
         public void MakeChange()
         {
             Debug.WriteLine($"start {startingCell}{startingFigure.MyName()}\nend {endingCell} {endingCell.figure?.MyName()}");
+            if (startingFigure is King)
+            {
+                var king = startingFigure as King;
+                king.Moved = true;
+                if (Math.Abs(endingCell.col - startingCell.col) == 2)
+                {
+                    startingFigure.Move(startingCell, endingCell);
+                    
+                    if (endingCell.col - startingCell.col == 2)
+                    {
+                        
+                        king.Castle(left: false);
+                        //board[row][7] move
+                        //esle board[row][0]
+                    }
+                    else if(endingCell.col - startingCell.col == -2)
+                    {
+                        king.Castle(left: true);
+                    }
+                    king.Castled = true;
+                    king.Moved = true;
+                    Castle = endingCell.col - startingCell.col;
+                    return;
+
+                }
+            }
             if (FigureAttacking())
             {
                 //startingFigure.Move(startingCell, endingCell, endingFigure);
@@ -97,6 +127,31 @@ namespace ChessGL.Board
         }
         public void ReverseChange()
         {
+            if (Castle != 0)
+            {
+                var king = startingFigure as King;
+                //king.ToDefaultPosition();
+                king.Move(endingCell, startingCell);
+                if (Castle == -2)
+                {
+
+                    king.leftRook.Move(king.leftCell, king.leftRook.defaultCell);
+                    king.leftCell.Empty = true;
+                }
+                else
+                {
+                    king.rightRook.Move(king.rightCell, king.rightRook.defaultCell);
+                    king.rightCell.Empty = true;
+                }
+                endingCell.Empty = true;
+                king.Moved = false;
+                king.Castled = false;
+                king.Active = true;
+                
+                Castle = 0;
+                return;
+
+            }
             startingFigure.Move(endingCell, startingCell);
             if (endingFigure != null)
             {
