@@ -9,21 +9,24 @@ using ChessGL.Control;
 
 namespace ChessGL.Menu
 {
-    class StartMenu
+    class StartMenu : BaseMenu
     {
-        TwoStageMouse mouse;
+        //TwoStageMouse mouse;
         StartTestMatchButton startTestMatchButton;
         StartEngineMatchButton startEngineMatchButton;
-        Point e;
-        public StartMenu()
+        //Point e;
+        public StartMenu(Texture2D texture, Point position)
         {
+            Texture = texture;
+            Position = position;
+            ResizeOption = 1.8f;
 
             startTestMatchButton = new StartTestMatchButton();
             startTestMatchButton.Position = new Point(100, 100);
             startTestMatchButton.StartingMatch = false;
 
             startEngineMatchButton = new StartEngineMatchButton();
-            startEngineMatchButton.Position = new Point(100, 300);
+            startEngineMatchButton.Position = new Point(100, 330);
             startEngineMatchButton.StartingMatch = false;
 
             mouse = new TwoStageMouse();
@@ -55,16 +58,17 @@ namespace ChessGL.Menu
             mouse.firstClick = true;
             return 0;
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
+            base.Draw(spriteBatch);
             startTestMatchButton.Draw(spriteBatch);
             startEngineMatchButton.Draw(spriteBatch);
 
         }
-        protected virtual void OnMenuMouseClick(StartMenu menu, Point e)
-        {
-            MenuMouseClickEvent?.Invoke(this, e);
-        }
-        public event EventHandler<Point> MenuMouseClickEvent;
+        //protected virtual void OnMenuMouseClick(StartMenu menu, Point e)
+        //{
+        //    MenuMouseClickEvent?.Invoke(this, e);
+        //}
+        //public event EventHandler<Point> MenuMouseClickEvent;
     }
 }

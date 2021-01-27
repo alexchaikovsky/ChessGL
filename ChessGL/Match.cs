@@ -201,6 +201,8 @@ namespace ChessGL
             //desk.board[7][4].figure = whiteKing;
             //desk.board[7][4].Empty = false;
 
+            whiteKing.AddRooks(whiteRook2, whiteRook1, desk.board[7][3], desk.board[7][5]);
+            blackKing.AddRooks(blackRook2, blackRook1, desk.board[0][3], desk.board[0][5]);
 
             deskTexture = game.Content.Load<Texture2D>("desk");
             //whiteQueenTexture = Content.Load<Texture2D>("white_queen");
@@ -285,12 +287,12 @@ namespace ChessGL
                     }
                     if (whitePossibleMovesNumber == 0)
                     {
-                        MatchEnded = true;
+                        //MatchEnded = true;
                         Debug.WriteLine("WHITE LOSE!");
                     }
                     else if (blackPossibleMovesNumber == 0)
                     {
-                        MatchEnded = true;
+                        //MatchEnded = true;
                         Debug.WriteLine("BLACK LOSE!");
                     }
                 }

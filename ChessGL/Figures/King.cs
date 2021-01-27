@@ -11,6 +11,11 @@ namespace ChessGL.Figures
         public Texture2D attackedTexture;
         List <IMove> attackMoves;
         CheckKing checkKing;
+        public Rook leftRook;
+        public Rook rightRook;
+        public Cell leftCell;
+        public Cell rightCell;
+
         public bool UnderAttack { get; set; }
         public King(bool white, Cell defaultCell)
         {
@@ -26,7 +31,9 @@ namespace ChessGL.Figures
             checkKing = new CheckKing(white, attackMoves);
             checkKing.Move(defaultCell);
             UnderAttack = false;
-            
+            Moved = false;
+            Castled = false;
+
             this.white = white;
             this.defaultCell = defaultCell;
             if (white)
@@ -36,6 +43,26 @@ namespace ChessGL.Figures
             else
             {
                 this.defaultPosition = new Point(100, 100);
+            }
+        }
+        public bool Moved { get; set; }
+        public bool Castled { get; set; }
+        public void AddRooks(Rook left, Rook right, Cell leftCell, Cell rightCell)
+        {
+            leftRook = left;
+            rightRook = right;
+            this.leftCell = leftCell;
+            this.rightCell = rightCell;
+        }
+
+        public void Castle(bool left)
+        {
+            if (left) {
+                leftRook.Move(leftRook.cell, leftCell);
+            }
+            else
+            {
+                rightRook.Move(rightRook.cell, rightCell);
             }
         }
         public override void Draw(SpriteBatch spriteBatch)
