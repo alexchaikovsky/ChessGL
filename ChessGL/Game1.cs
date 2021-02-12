@@ -81,7 +81,11 @@ namespace ChessGL
             }
             else
             {
-                switch(startMenu.Update())
+                //var nplayer = new NetPlayer();
+                //Debug.WriteLine(nplayer.Get().Result);
+                //Debug.WriteLine($"STATUS: {nplayer.Post(new MouseState().Position.ToString()).Result}");
+
+                switch (startMenu.Update())
                 {
                     case 1:
                         match = new Match(this, _spriteBatch, new PcPlayer(), new PcPlayer());

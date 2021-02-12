@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ChessGL.Board;
 namespace ChessGL.Figures
 {
-    class Pawn : Figure
+    public class Pawn : Figure
     {
         // TODO: add transfomation on last row
         // TODO: check right white pawn creatin path circles on default position after check
