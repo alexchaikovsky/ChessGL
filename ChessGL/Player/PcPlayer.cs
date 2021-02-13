@@ -13,7 +13,7 @@ namespace ChessGL.Player
     public class PcPlayer : Player, IPlayer
     {
         TwoStageMouse mouse;
-        MouseClickEventArgs e;
+        public MouseClickEventArgs e;
         public bool IsPcPlayer { get; set; }
         
         //public PcPlayer(Desk desk)

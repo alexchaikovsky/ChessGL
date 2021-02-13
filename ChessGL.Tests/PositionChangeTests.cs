@@ -20,8 +20,8 @@ namespace ChessGL.Tests
 
             positionChange.MakeChange();
 
-            Assert.Equal(whitePawn.cell, desk.board[6][2]);
-            Assert.Equal(whitePawn, desk.board[6][2].figure);
+            Assert.Same(whitePawn.cell, desk.board[6][2]);
+            Assert.Same(whitePawn, desk.board[6][2].figure);
         }
         [Fact]
         public void CanEatFigure()
@@ -43,8 +43,8 @@ namespace ChessGL.Tests
 
             positionChange.MakeChange();
 
-            Assert.Equal(whitePawn.cell, desk.board[5][2]);
-            Assert.Equal(whitePawn, desk.board[5][2].figure);
+            Assert.Same(whitePawn.cell, desk.board[5][2]);
+            Assert.Same(whitePawn, desk.board[5][2].figure);
             Assert.False(blackPawn.Active);
         }
         [Fact]
@@ -64,8 +64,8 @@ namespace ChessGL.Tests
             positionChange.MakeChange();
             positionChange.ReverseChange();
 
-            Assert.Equal(whitePawn.cell, desk.board[6][1]);
-            Assert.Equal(whitePawn, desk.board[6][1].figure);
+            Assert.Same(whitePawn.cell, desk.board[6][1]);
+            Assert.Same(whitePawn, desk.board[6][1].figure);
             Assert.True(whitePawn.Active);
         }
         [Fact]
@@ -89,11 +89,11 @@ namespace ChessGL.Tests
             positionChange.MakeChange();
             positionChange.ReverseChange();
 
-            Assert.Equal(whitePawn.cell, desk.board[6][1]);
-            Assert.Equal(whitePawn, desk.board[6][1].figure);
+            Assert.Same(whitePawn.cell, desk.board[6][1]);
+            Assert.Same(whitePawn, desk.board[6][1].figure);
 
-            Assert.Equal(blackPawn.cell, desk.board[5][2]);
-            Assert.Equal(blackPawn, desk.board[5][2].figure);
+            Assert.Same(blackPawn.cell, desk.board[5][2]);
+            Assert.Same(blackPawn, desk.board[5][2].figure);
 
             Assert.True(blackPawn.Active);
             Assert.True(whitePawn.Active);
@@ -121,11 +121,11 @@ namespace ChessGL.Tests
             Assert.Null(desk.board[7][2].figure);
             positionChange.MakeChange();
 
-            Assert.Equal(king.cell, desk.board[7][2]);
-            Assert.Equal(king, desk.board[7][2].figure);
+            Assert.Same(king.cell, desk.board[7][2]);
+            Assert.Same(king, desk.board[7][2].figure);
 
-            Assert.Equal(rook, desk.board[7][3].figure);
-            Assert.Equal(rook.cell, desk.board[7][3]);
+            Assert.Same(rook, desk.board[7][3].figure);
+            Assert.Same(rook.cell, desk.board[7][3]);
 
         }
         [Fact]
@@ -153,11 +153,11 @@ namespace ChessGL.Tests
             positionChange.MakeChange();
             positionChange.ReverseChange();
 
-            Assert.Equal(king.cell, desk.board[7][4]);
-            Assert.Equal(king, desk.board[7][4].figure);
+            Assert.Same(king.cell, desk.board[7][4]);
+            Assert.Same(king, desk.board[7][4].figure);
 
-            Assert.Equal(rook, desk.board[7][0].figure);
-            Assert.Equal(rook.cell, desk.board[7][0]);
+            Assert.Same(rook, desk.board[7][0].figure);
+            Assert.Same(rook.cell, desk.board[7][0]);
         }
     }
 }
