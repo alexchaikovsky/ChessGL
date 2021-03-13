@@ -10,6 +10,7 @@ using ChessGL.Control.Buttons;
 using ChessGL.Menu;
 using ChessGL.Control;
 using ChessGL.Player;
+using ChessGL.Views;
 
 
 
@@ -25,6 +26,7 @@ namespace ChessGL
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private List<IView> views = new List<IView>();
 
         public Game1()
         {

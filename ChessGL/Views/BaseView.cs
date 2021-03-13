@@ -6,16 +6,19 @@ using ChessGL.Control;
 
 namespace ChessGL.Views
 {
-    class BaseView : IDrawable
+    class BaseView : IView
     {
         List<IDrawable> drawables = new List<IDrawable>();
-        UserController contoller;
-        public Texture2D Texture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Point Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        
-        public BaseView(SpriteBatch spriteBatch, UserController contoller)
-        {
+        UserController controller;
+        SpriteBatch spriteBatch;
+        public Texture2D Texture { get; set; }
+        Point IDrawable.Position { get; set; }
+        public bool Show { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public BaseView(SpriteBatch spriteBatch, UserController controller)
+        {
+            this.controller = controller;
+            this.spriteBatch = spriteBatch;
         }
         public void AddItem(IDrawable item)
         {
@@ -23,10 +26,22 @@ namespace ChessGL.Views
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var item in drawables)
+            if (Show)
             {
-                item.Draw(spriteBatch);
+                foreach (var item in drawables)
+                {
+                    item.Draw(spriteBatch);
+                }
             }
+        }
+        public void SubscribeSelectables()
+        {
+            //
+        }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,8 +8,4 @@ namespace ChessGL.Control
     {
         public abstract void UserControllerSelectionEvent(object sender, UserControllerEventArgs e);
     }
-    public class UserControllerEventArgs
-    {
-        public int MyProperty { get; set; }
-    }
 }
