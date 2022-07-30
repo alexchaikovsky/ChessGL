@@ -10,8 +10,10 @@ using System.Threading;
 using ChessGL.Control;
 using ChessGL.Board;
 using ChessGL.Control.Buttons;
-using ChessGL.Figures;
+using ChessGL.Core.Board;
+using ChessGL.Core.Figures;
 using ChessGL.Player;
+using Figure = ChessGL.Figures.Figure;
 
 namespace ChessGL
 {
@@ -195,7 +197,7 @@ namespace ChessGL
                     // }
                 }
             }
-            desk.board[7][3].figure = whiteQueen;
+            desk.board[7][3].Figure = whiteQueen;
             desk.board[7][3].Empty = false;
             whiteQueen.Position = desk.board[7][3].Position;
             //desk.board[7][4].figure = whiteKing;

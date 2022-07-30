@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using ChessGL.Moves;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using ChessGL.Board;
+﻿using ChessGL.Core.Board;
 
-namespace ChessGL.Figures
+namespace ChessGL.Core.Figures
 {
     public class King : Figure
     {
@@ -19,7 +15,6 @@ namespace ChessGL.Figures
         public bool UnderAttack { get; set; }
         public King(bool white, Cell defaultCell)
         {
-            Init();
             moveTypes.Add(new MoveKing());
             
             attackMoves = new List<IMove>();
@@ -69,9 +64,9 @@ namespace ChessGL.Figures
         {
             if (UnderAttack)
             {
-                spriteBatch.Draw(attackedTexture, Position.ToVector2(), null, Color.White, 0, new Vector2(0, 0), 0.15f, SpriteEffects.None, 1);
+                spriteBatch.Draw(attackedTexture, Position.ToVector2(), null, PieceColor.White, 0, new Vector2(0, 0), 0.15f, SpriteEffects.None, 1);
             }
-            spriteBatch.Draw(texture, Position.ToVector2(), null, Color.White, 0, new Vector2(0, 0), 0.15f, SpriteEffects.None, 1);
+            spriteBatch.Draw(texture, Position.ToVector2(), null, PieceColor.White, 0, new Vector2(0, 0), 0.15f, SpriteEffects.None, 1);
         }
         public bool IsAttacked(Desk desk)
         {

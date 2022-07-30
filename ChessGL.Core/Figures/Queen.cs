@@ -1,15 +1,9 @@
-﻿using ChessGL.Moves;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using ChessGL.Board;
-namespace ChessGL.Figures
+﻿namespace ChessGL.Core.Figures
 {
     public class Queen : Figure
     {
         public Queen(bool white, Cell defaultCell = null)
         {
-            Init();
             moveTypes.Add(new MoveDiag());
             moveTypes.Add(new MoveStraight());
             this.white = white;

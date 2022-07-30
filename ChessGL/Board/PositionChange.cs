@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using ChessGL.Moves;
-using ChessGL.Figures;
 using System.Diagnostics;
+using ChessGL.Core.Figures;
+using Figure = ChessGL.Figures.Figure;
 
 namespace ChessGL.Board
 {

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Figures;
-using ChessGL.Board;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using ChessGL.Core.Board;
+using ChessGL.Core.Figures;
+using Figure = ChessGL.Figures.Figure;
 
-namespace ChessGL.Moves
+namespace ChessGL.Core.Moves
 {
     public class MoveKing : Move, IMove
     {

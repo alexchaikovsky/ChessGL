@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Figures;
-using ChessGL.Board;
+﻿using ChessGL.Core.Board;
 
-namespace ChessGL.Moves
+namespace ChessGL.Core.Moves
 {
     public class MovePawn : Move, IMove
     {

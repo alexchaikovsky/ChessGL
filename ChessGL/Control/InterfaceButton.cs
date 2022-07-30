@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ChessGL.Figures;
 using ChessGL.Menu;
 using ChessGL.Moves;
 using Microsoft.Xna.Framework;
@@ -29,7 +30,7 @@ namespace ChessGL.Control
             {
                 if (PointInEntityArea(e))
                 {
-                    Action();
+                    ExecuteAction(e);
                 }
             }
         }

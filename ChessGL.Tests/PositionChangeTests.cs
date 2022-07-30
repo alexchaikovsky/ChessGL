@@ -1,4 +1,6 @@
 ﻿using ChessGL.Board;
+using ChessGL.Core.Board;
+using ChessGL.Core.Figures;
 using ChessGL.Figures;
 using ChessGL.Moves;
 
@@ -21,7 +23,7 @@ namespace ChessGL.Tests
             positionChange.MakeChange();
 
             Assert.Equal(whitePawn.cell, desk.board[6][2]);
-            Assert.Equal(whitePawn, desk.board[6][2].figure);
+            Assert.Equal(whitePawn, desk.board[6][2].Figure);
         }
         [Fact]
         public void CanEatFigure()
@@ -44,7 +46,7 @@ namespace ChessGL.Tests
             positionChange.MakeChange();
 
             Assert.Equal(whitePawn.cell, desk.board[5][2]);
-            Assert.Equal(whitePawn, desk.board[5][2].figure);
+            Assert.Equal(whitePawn, desk.board[5][2].Figure);
             Assert.False(blackPawn.Active);
         }
         [Fact]
@@ -65,7 +67,7 @@ namespace ChessGL.Tests
             positionChange.ReverseChange();
 
             Assert.Equal(whitePawn.cell, desk.board[6][1]);
-            Assert.Equal(whitePawn, desk.board[6][1].figure);
+            Assert.Equal(whitePawn, desk.board[6][1].Figure);
             Assert.True(whitePawn.Active);
         }
         [Fact]
@@ -90,10 +92,10 @@ namespace ChessGL.Tests
             positionChange.ReverseChange();
 
             Assert.Equal(whitePawn.cell, desk.board[6][1]);
-            Assert.Equal(whitePawn, desk.board[6][1].figure);
+            Assert.Equal(whitePawn, desk.board[6][1].Figure);
 
             Assert.Equal(blackPawn.cell, desk.board[5][2]);
-            Assert.Equal(blackPawn, desk.board[5][2].figure);
+            Assert.Equal(blackPawn, desk.board[5][2].Figure);
 
             Assert.True(blackPawn.Active);
             Assert.True(whitePawn.Active);
@@ -117,14 +119,14 @@ namespace ChessGL.Tests
                 endingCell = desk.board[7][2],
                 endingFigure = null
             };
-            Assert.Null(desk.board[7][1].figure);
-            Assert.Null(desk.board[7][2].figure);
+            Assert.Null(desk.board[7][1].Figure);
+            Assert.Null(desk.board[7][2].Figure);
             positionChange.MakeChange();
 
             Assert.Equal(king.cell, desk.board[7][2]);
-            Assert.Equal(king, desk.board[7][2].figure);
+            Assert.Equal(king, desk.board[7][2].Figure);
 
-            Assert.Equal(rook, desk.board[7][3].figure);
+            Assert.Equal(rook, desk.board[7][3].Figure);
             Assert.Equal(rook.cell, desk.board[7][3]);
 
         }
@@ -147,17 +149,36 @@ namespace ChessGL.Tests
                 endingCell = desk.board[7][2],
                 endingFigure = null
             };
-            Assert.Null(desk.board[7][1].figure);
-            Assert.Null(desk.board[7][2].figure);
+            Assert.Null(desk.board[7][1].Figure);
+            Assert.Null(desk.board[7][2].Figure);
 
             positionChange.MakeChange();
             positionChange.ReverseChange();
 
             Assert.Equal(king.cell, desk.board[7][4]);
-            Assert.Equal(king, desk.board[7][4].figure);
+            Assert.Equal(king, desk.board[7][4].Figure);
 
-            Assert.Equal(rook, desk.board[7][0].figure);
-            Assert.Equal(rook.cell, desk.board[7][0]);
+            Assert.Equal(rook, desk.board[7][0].Figure);
+            Assert.Equal(
+                rook.cell, desk.board[7][0]);
+        }
+
+        public void Test()
+        {
+            var vkats = new string[] {"vkatotusya", "vkatotusya"};
+		
+            var x1 = () => true ? doVkat() : doVkatout();
+            var x2 = () => {
+                fun1();
+                fun2();
+            };
+            var x3 = () => 1 != 0 ? x2() : setVkat(true);
+            var x4 = (string vkat) => {
+                x1();
+                x3();
+            };
+		
+            vkats.ForEach(x4);
         }
     }
 }

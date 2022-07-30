@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ChessGL.Moves;
 using ChessGL.Board;
+using ChessGL.Core.Board;
 
 namespace ChessGL.Control.Buttons
 {

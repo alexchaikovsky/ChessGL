@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Figures;
-using ChessGL.Board;
-namespace ChessGL.Moves
+﻿using ChessGL.Core.Board;
+using ChessGL.Core.Figures;
+
+namespace ChessGL.Core
 {
     public interface IMove
     {

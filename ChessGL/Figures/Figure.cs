@@ -5,6 +5,8 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using ChessGL.Board;
+using ChessGL.Core;
+using ChessGL.Core.Board;
 using ChessGL.Player;
 
 namespace ChessGL.Figures
@@ -26,13 +28,13 @@ namespace ChessGL.Figures
         //    this.white = white;
         //    this.defaultCell = defaultCell;
         //}
-        public bool Subcribed { get; set; }
-        protected void Init()
+        protected Figure()
         {
             moveTypes = new List<IMove>();
             history = new Stack<Cell>();
         }
-        
+        public bool Subcribed { get; set; }
+
         public bool CanEat(Figure figure)
         {
             if (figure == null)
@@ -51,10 +53,10 @@ namespace ChessGL.Figures
         {
             return defaultCell.Position;
         }
-        public virtual void LoadTexture(Texture2D texture)
+        public virtual void LoadTexture(Texture2D figureTexture)
         {
-            this.texture = texture;
-            this.pixelSize = (int)(resizeRate * texture.Width);
+            this.texture = figureTexture;
+            this.pixelSize = (int)(resizeRate * figureTexture.Width);
             this.Selectable = true;
             this.Active = true;
         }
@@ -154,59 +156,12 @@ namespace ChessGL.Figures
             Move(start, end);
             return true;
         }
-        public void CellClickEvent(object sender, CellEventArgs e)
-        {
-            if (Selected)
-            {
-                if (sender is Cell)
-                {
-                    Cell cell = sender as Cell;
-
-
-                    if (Position != cell.Position)
-                    {
-                        if (cell.figure != null)
-                        {
-                            if (cell.figure.white != this.white)
-                            {
-                                Position = cell.Position;
-                                cell.figure = this;
-                                Selected = false;
-                                Debug.WriteLine($"MOVED {this.ToString()} TO CELL {cell.row}{(char)cell.col}");
-                            }
-                        }
-                        else
-                        {
-                            Position = cell.Position;
-                            cell.figure = this;
-                            Selected = false;
-                            Debug.WriteLine($"MOVED {this.ToString()} TO CELL {cell.row}{(char)cell.col}");
-                        }
-
-                    }
-
-                }
-            }
-            else
-            {
-                Cell cell = sender as Cell;
-                if (Position == cell.Position)
-                {
-                    //Position = cell.Position;
-                    if (cell.figure != null)
-                    {
-                        if (this.white != cell.figure.white)
-                        {
-                            Active = false;
-                        }
-                        Selected = false;
-                        Debug.WriteLine($"FIGURE {this.ToString()} ON CELL {cell.row}{(char)cell.col}");
-                    }
-                }
-
-            }
-        }
         public bool Active { get; set; }
+        public override void Action<TArgs>(TArgs args)
+        {
+            base.ExecuteAction(args);
+        }
+
         public override void MouseClickEvent(object sender, MouseClickEventArgs e)
         {
             if (sender is PcPlayer)
@@ -251,5 +206,9 @@ namespace ChessGL.Figures
             }
         }
 
+        public override void Action()
+        {
+            base.ExecuteAction();
+        }
     }
 }

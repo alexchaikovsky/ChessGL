@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ChessGL.Board;
+using ChessGL.Core.Board;
 using ChessGL.Figures;
 
 namespace ChessGL.Player
@@ -125,17 +126,9 @@ namespace ChessGL.Player
             else { if (!figure.Subcribed) MouseClickEvent += figure.MouseClickEvent; figure.Subcribed = true; }
             Debug.WriteLine($"After check Cell {figure.cell} Figure = {figure.MyName()} Active = {figure.Active} Subscribed = {figure.Subcribed}");
         }
-        public void SubscribeCell(Cell cell)
-        {
-            MouseClickEvent += cell.MouseClickEvent;
-        }
         public void AddDesk(Desk desk)
         {
             this.desk = desk;
-        }
-        protected virtual void OnMouseClick(PcPlayer pcPlayer, MouseClickEventArgs e)
-        {
-            MouseClickEvent?.Invoke(this, e);
         }
         public event EventHandler<MouseClickEventArgs> MouseClickEvent;
 

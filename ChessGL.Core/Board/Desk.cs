@@ -1,16 +1,26 @@
-﻿using ChessGL.Figures;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.Diagnostics;
+using ChessGL.Core.Figures;
 
-namespace ChessGL.Board
+namespace ChessGL.Core.Board
 {
+    public class DeskEvent
+    {
+        public (int, int) CellPosition { get; set; }
+    }
+
+
+    public class DeskEventPair
+    {
+        public DeskEvent First { get; set; }
+        public DeskEvent Second { get; set; }
+        public bool IsFull => First is not null && Second is not null;
+    }
+    
+    
     public class Desk
     {
+        private readonly List<DeskEventPair> _events = new();
+
         public List<List<Cell>> board;
         public List<List<Cell>> originalPositions;
         public List<Cell> currentPath;
@@ -29,6 +39,27 @@ namespace ChessGL.Board
             return stringHistory.ToArray();
             
         }
+
+        public void AddEvent(DeskEvent @event)
+        {
+            var lastPair = _events.LastOrDefault();
+            
+            if (lastPair is null || lastPair.IsFull)
+            {
+                var newPair = new DeskEventPair
+                {
+                    First = @event
+                };
+                _events.Add(newPair);
+                return;
+            }
+
+            lastPair.Second = @event;
+            // validate
+            // execute
+
+
+        }
         public string GetHistoryAsString()
         {
             string historyString = "";
@@ -39,7 +70,7 @@ namespace ChessGL.Board
             }
             return historyString;
         }
-        public Desk(Single resizeOption = 1, int whitePerspective = -1)
+        public Desk(float resizeOption = 1, int whitePerspective = -1)
         {
             currentPath = new List<Cell>();
             this.whitePerspective = whitePerspective;
@@ -123,10 +154,10 @@ namespace ChessGL.Board
                 {
                     if (i == row && j == col)
                     {
-                        if (board[i][j].figure != null)
+                        if (board[i][j].Figure != null)
                         {
-                            cell.figure = board[i][j].figure;
-                            cell.figure.cell = cell;
+                            cell.Figure = board[i][j].Figure;
+                            cell.Figure.cell = cell;
                             //board[i][j].figure.cell = cell;
                         }
                         board[i][j] = cell;
@@ -211,7 +242,7 @@ namespace ChessGL.Board
                 foreach(var cell in row)
                 {
                     cell.Empty = true;
-                    cell.figure = null;
+                    cell.Figure = null;
                 }
             }
         }
@@ -240,9 +271,9 @@ namespace ChessGL.Board
                 for (int j = 0; j < 8; j++)
                 {
                     board[i][j].Position = tmpBoard[i][j].Position;
-                    if (board[i][j].figure != null)
+                    if (board[i][j].Figure != null)
                     {
-                        board[i][j].figure.Position = tmpBoard[i][j].Position;
+                        board[i][j].Figure.Position = tmpBoard[i][j].Position;
                     }
                 }
             }

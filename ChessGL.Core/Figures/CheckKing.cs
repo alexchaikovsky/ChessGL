@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Moves;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace ChessGL.Figures
+﻿namespace ChessGL.Core.Figures
 {
     class CheckKing : Figure
     {
         public CheckKing(bool white, List<IMove> attackMoves)
         {
-            Init();
             this.white = white;
             moveTypes = attackMoves;
         }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Figures;
-using ChessGL.Board;
-namespace ChessGL.Moves
+﻿using ChessGL.Core.Board;
+
+namespace ChessGL.Core.Moves
 {
     public class MoveKnight : Move, IMove
     {

@@ -1,7 +1,4 @@
-﻿using ChessGL.Figures;
-using System.Collections.Generic;
-
-namespace ChessGL.Moves
+﻿namespace ChessGL.Core
 {
     public abstract class Move
     {

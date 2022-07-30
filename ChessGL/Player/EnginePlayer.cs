@@ -5,6 +5,7 @@ using ChessGL.Board;
 using Stockfish;
 using Stockfish.NET;
 using System.Diagnostics;
+using ChessGL.Core.Board;
 using ChessGL.Figures;
 
 namespace ChessGL.Player
@@ -52,12 +53,12 @@ namespace ChessGL.Player
                     if (cell.ToString() == startString)
                     {
                         positionChange.startingCell = cell;
-                        positionChange.startingFigure = cell.figure;
+                        positionChange.startingFigure = cell.Figure;
                     }
                     if (cell.ToString() == endString)
                     {
                         positionChange.endingCell = cell;
-                        positionChange.endingFigure = cell.figure;
+                        positionChange.endingFigure = cell.Figure;
                     }
                 }
             }
@@ -72,22 +73,6 @@ namespace ChessGL.Player
             UpdatePosition();
             MakeMove();
             
-        }
-
-        public void SubscribeButtons(Match match)
-        {
-            return;
-            //throw new NotImplementedException();
-        }
-
-        public void CheckFigureSubscription(Figure figure)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public void SubscribeCell(Cell cell)
-        {
-            //throw new NotImplementedException();
         }
         public void AddDesk(Desk desk)
         {

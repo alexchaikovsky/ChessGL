@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ChessGL.Board;
+using ChessGL.Core.Board;
 
 namespace ChessGL.Player
 {

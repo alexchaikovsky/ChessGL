@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ChessGL.Moves;
-using ChessGL.Board;
-namespace ChessGL.Figures
+﻿namespace ChessGL.Core.Figures
 {
     class Knight : Figure
     {
         public Knight(bool white, Cell defaultCell = null)
         {
-            Init();
             moveTypes.Add(new MoveKnight());
             this.white = white;
             this.defaultCell = defaultCell;

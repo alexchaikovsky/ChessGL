@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using ChessGL.Figures;
-using ChessGL.Board;
-namespace ChessGL.Moves
+﻿using ChessGL.Core.Board;
+using ChessGL.Core.Figures;
+
+namespace ChessGL.Core.Moves
 {
     public class MoveDiag : IMove
     {
@@ -16,11 +13,14 @@ namespace ChessGL.Moves
             for (int i = col + 1; i < 8; i++) //moveleft
             {
                 row++;
-                if (row == 8) { break; }
+                if (row == 8)
+                {
+                    break;
+                }
                 //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
-                    if (board[row][i].figure.white ^ figure.white)
+                    if (figure.CanEat(board[row][i].Figure)
                     {
                         path.Add(board[row][i]);
                         //board[row][i].Show = show;
@@ -38,7 +38,7 @@ namespace ChessGL.Moves
                 //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
-                    if (board[row][i].figure.white ^ figure.white)
+                    if (board[row][i].Figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
                         //board[row][i].Show = show;
@@ -56,7 +56,7 @@ namespace ChessGL.Moves
                 //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
-                    if (board[row][i].figure.white ^ figure.white)
+                    if (board[row][i].Figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
                         //board[row][i].Show = show;
@@ -74,7 +74,7 @@ namespace ChessGL.Moves
                 //Debug.WriteLine("Checking" + board[row][i].ToString());
                 if (!board[row][i].Empty)
                 {
-                    if (board[row][i].figure.white ^ figure.white)
+                    if (board[row][i].Figure.white ^ figure.white)
                     {
                         path.Add(board[row][i]);
                         //board[row][i].Show = show;

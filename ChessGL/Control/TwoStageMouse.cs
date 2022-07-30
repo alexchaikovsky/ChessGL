@@ -3,7 +3,13 @@ using System.Diagnostics;
 
 namespace ChessGL.Control
 {
-    class TwoStageMouse
+    public enum ClickType
+    {
+        Single,
+        Double,
+        Hold
+    }
+    public class TwoStageMouse
     {
         MouseState lastMouseState;
         bool mousePressed;
@@ -14,7 +20,7 @@ namespace ChessGL.Control
             mousePressed = false;
             firstClick = true;
         }
-        public int CheckClick(MouseState mouseState)
+        public ClickType CheckClick(MouseState mouseState)
         {
             if (mouseState.LeftButton == ButtonState.Pressed && lastMouseState.LeftButton == ButtonState.Released)
             {
@@ -25,28 +31,28 @@ namespace ChessGL.Control
                 {
                     firstClick = false;
                     Debug.WriteLine("1st Click");
-                    return 1;
+                    return ClickType.Single;
                 }
                 else
                 {
                     firstClick = true;
                     Debug.WriteLine("2nd Click");
-                    return 2;
+                    return ClickType.Double;
                 }
                 //MouseClickEvent(this, new MouseClickEventArgs { point = mouse.Position, mouse = mouse });
                 //Debug.WriteLine("Click");
             }
 
 
-            if (mouseState.LeftButton == ButtonState.Released && lastMouseState.LeftButton == ButtonState.Pressed)
+            /*if (mouseState.LeftButton == ButtonState.Released && lastMouseState.LeftButton == ButtonState.Pressed)
             {
                 mousePressed = false;
                 Debug.WriteLine("Release");
                 lastMouseState = mouseState;
                 return -1;
-            }
+            }*/
 
-            return 0;
+            return ClickType.Hold;
         }
     }
 }

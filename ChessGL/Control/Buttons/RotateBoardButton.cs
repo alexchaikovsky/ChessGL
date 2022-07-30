@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ChessGL.Board;
+using ChessGL.Core.Board;
 
 namespace ChessGL.Control.Buttons
 {

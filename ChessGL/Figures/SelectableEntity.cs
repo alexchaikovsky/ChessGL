@@ -1,10 +1,10 @@
-﻿using ChessGL.Figures;
-using Microsoft.Xna.Framework;
-using System.Diagnostics;
-using ChessGL.Board;
+﻿using System.Diagnostics;
+using ChessGL.Base;
+using ChessGL.Moves;
 using ChessGL.Player;
+using Microsoft.Xna.Framework;
 
-namespace ChessGL.Moves
+namespace ChessGL.Figures
 {
     public abstract class SelectableEntity : ISelectableEntity
     {
@@ -12,25 +12,14 @@ namespace ChessGL.Moves
 
         public bool Selected { get; set; }
         public bool Selectable { get; set; }
-        public virtual Point Position { get; set; }
-        public virtual string MyName()
+        public Point Position { get; set; }
+        public virtual void ExecuteAction(Click click)
         {
-            return this.ToString();
-        }
-        public virtual void CallAnswerEvent()
-        {
-            return;
-        }
-        public virtual void Action()
-        {
+            Debug.WriteLine("called Action");
             return;
         }
         public bool PointInEntityArea(Point point)
         {
-            //int AreaXL = (int)(Position.X - pixelSize / 2);
-            //int AreaXR = (int)(Position.Y + pixelSize / 2);
-            //int AreaYL = (int)(Position.X - pixelSize / 2);
-            //int AreaYR = (int)(Position.Y + pixelSize / 2);
             int AreaXL = Position.X;
             int AreaXR = Position.X + pixelSize;
             int AreaYL = Position.Y;
@@ -38,27 +27,7 @@ namespace ChessGL.Moves
             //Debug.WriteLine(point.ToString());
             //Debug.WriteLine($"W = {pixelSize}, H = {pixelSize}");
 
-            if (point.X >= AreaXL && point.X <= AreaXR)
-            {
-                if (point.Y >= AreaYL && point.Y <= AreaYR)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public virtual void MouseClickEvent(object sender, MouseClickEventArgs e)
-        {
-            if (sender is PcPlayer)
-            {
-                Debug.WriteLine("clickonentity");
-                if (PointInEntityArea(e.point))
-                {
-                    Debug.WriteLine("in area");
-                    this.Action();
-                }
-                
-            }
+            return point.X >= AreaXL && point.X <= AreaXR && point.Y >= AreaYL && point.Y <= AreaYR;
         }
     }
 }
